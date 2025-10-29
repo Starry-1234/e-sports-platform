@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>比赛事件列表</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- 页面标题和操作 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>比赛事件列表</h1>
+        <div>
+            <a th:href="@{/matches/events/stats/{matchId}(matchId=${matchId})}"
+               class="btn btn-info me-2">
+                <i class="fas fa-chart-bar"></i> 事件统计
+            </a>
+            <a th:href="@{/matches/events/timeline/{matchId}(matchId=${matchId})}"
+               class="btn btn-success me-2">
+                <i class="fas fa-stream"></i> 时间线
+            </a>
+            <a th:href="@{/matches/events/add}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> 添加事件
+            </a>
+        </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row mb-4" th:if="${stats}">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${stats.totalEvents}">0</h5>
+                    <p class="card-text">总事件数</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">事件类型分布</h6>
+                    <div th:each="stat : ${stats.eventStats}">
+                        <span th:text="${stat.event_type}">事件类型</span>:
+                        <span th:text="${stat.event_count}">数量</span> 次
+                        <span th:if="${stat.total_gold}">(金币: <span th:text="${stat.total_gold}">0</span>)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 事件类型筛选 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">事件类型筛选</h5>
+        </div>
+        <div class="card-body">
+            <div class="btn-group flex-wrap" role="group">
+                <a th:href="@{/matches/events/match/{matchId}(matchId=${matchId})}"
+                   class="btn btn-outline-secondary">全部</a>
+                <a th:each="type : ${T(com.hainan.university.esports.entity.MatchEvent).getEventTypes()}"
+                   th:href="@{/matches/events/match/{matchId}/type/{type}(matchId=${matchId}, type=${type})}"
+                   class="btn btn-outline-primary"
+                   th:text="${T(com.hainan.university.esports.entity.MatchEvent).getEventTypeDisplayName(type)}">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 事件列表 -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">事件列表</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>时间</th>
+                        <th>事件类型</th>
+                        <th>选手</th>
+                        <th>英雄</th>
+                        <th>目标选手</th>
+                        <th>金币</th>
+                        <th>描述</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="event : ${events}" th:classappend="${event.eventType == 'KILL'} ? 'table-success' : ''">
+                        <td th:text="${event.formattedTime}">00:00</td>
+                        <td>
+                            <span th:class="${event.eventIconClass}" th:text="${event.eventType}">事件类型</span>
+                        </td>
+                        <td th:text="${event.player.gameName}">选手名</td>
+                        <td>
+                            <img th:if="${event.hero.avatarUrl}"
+                                 th:src="${event.hero.avatarUrl}"
+                                 width="30" height="30" class="rounded-circle me-2">
+                            <span th:text="${event.hero.heroName}">英雄名</span>
+                        </td>
+                        <td th:text="${event.targetPlayer?.gameName}">-</td>
+                        <td th:text="${event.gold}">0</td>
+                        <td th:text="${event.eventDescription}">事件描述</td>
+                        <td>
+                            <a th:href="@{/matches/events/edit/{eventId}(eventId=${event.eventId})}"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form th:action="@{/matches/events/delete/{eventId}(eventId=${event.eventId})}"
+                                  method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('确定删除这个事件吗？')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(events)}">
+                        <td colspan="8" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                            暂无事件数据
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 实时更新区域 -->
+    <div class="card mt-4" id="realTimeEvents" style="display: none;">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-sync-alt text-success"></i> 实时事件
+                <small class="text-muted">（自动更新）</small>
+            </h5>
+        </div>
+        <div class="card-body" id="realTimeEventsContent">
+            <!-- 实时事件将通过AJAX加载 -->
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        // 实时事件更新功能
+        $(document).ready(function() {
+            let lastEventId = '0';
+            let matchId = '[[${matchId}]]';
+
+            function loadRealTimeEvents() {
+                $.get('/matches/events/realtime/' + matchId, { lastEventId: lastEventId })
+                    .done(function(events) {
+                        if (events.length > 0) {
+                            $('#realTimeEvents').show();
+                            let html = '';
+                            events.forEach(function(event) {
+                                html += '<div class="alert alert-info mb-2">';
+                                html += '<strong>' + event.formattedTime + '</strong> - ' + event.eventDescription;
+                                html += '</div>';
+
+                                // 更新最后事件ID
+                                lastEventId = event.eventId;
+                            });
+                            $('#realTimeEventsContent').prepend(html);
+                        }
+                    })
+                    .fail(function() {
+                        console.log('实时事件加载失败');
+                    });
+            }
+
+            // 每5秒更新一次
+            setInterval(loadRealTimeEvents, 5000);
+        });
+    </script>
+</div>
+</body>
+</html>

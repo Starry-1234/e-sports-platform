@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>事件统计分析</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>事件统计分析</h1>
+        <a th:href="@{/matches/events/match/{matchId}(matchId=${matchId})}"
+           class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回事件列表
+        </a>
+    </div>
+
+    <div class="row" th:if="${stats}">
+        <!-- 总体统计 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">总体统计</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>总事件数:</strong>
+                        <span class="badge bg-primary" th:text="${stats.totalEvents}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>事件类型数:</strong>
+                        <span class="badge bg-info" th:text="${#lists.size(stats.eventStats)}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 事件类型统计 -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">事件类型分布</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>事件类型</th>
+                            <th>数量</th>
+                            <th>占比</th>
+                            <th>总金币</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stat : ${stats.eventStats}">
+                            <td th:text="${stat.event_type}">事件类型</td>
+                            <td th:text="${stat.event_count}">0</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar"
+                                         th:style="'width: ' + ${stat.event_count * 100 / stats.totalEvents} + '%;'"
+                                         th:text="${#numbers.formatDecimal(stat.event_count * 100 / stats.totalEvents, 1, 1)} + '%'">
+                                    </div>
+                                </div>
+                            </td>
+                            <td th:text="${stat.total_gold} ?: '0'">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图表区域 -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">事件分布图表</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="eventChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            const ctx = document.getElementById('eventChart').getContext('2d');
+
+            // 这里应该从后端获取数据，这里用模拟数据
+            const eventChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['击杀', '死亡', '助攻', '推塔', '巨龙', '男爵'],
+                    datasets: [{
+                        label: '事件数量',
+                        data: [12, 8, 20, 3, 2, 1],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

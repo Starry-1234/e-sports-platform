@@ -1,0 +1,57 @@
+/* 自定义样式 */
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+}
+
+/* 事件类型颜色 */
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+/* 实时事件动画 */
+@keyframes highlight {
+    from { background-color: #d1ecf1; }
+    to { background-color: transparent; }
+}
+
+.highlight {
+    animation: highlight 2s ease-out;
+}
+
+/* 进度条样式 */
+.progress {
+    background-color: #e9ecef;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+
+    .btn-group .btn {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+/* 图表容器 */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}

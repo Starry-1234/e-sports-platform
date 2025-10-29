@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title th:text="${pageTitle}">事件表单</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${pageTitle}">添加比赛事件</h1>
+        <a th:href="@{/matches/events}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回事件列表
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <!-- 使用传统的name属性绑定，避免th:field问题 -->
+            <form th:action="@{/matches/events/save}" method="post">
+                <!-- 隐藏字段 -->
+                <input type="hidden" name="eventId" th:value="${matchEvent?.eventId}" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- 事件类型选择 -->
+                        <div class="mb-3">
+                            <label for="eventType" class="form-label">事件类型 *</label>
+                            <select name="eventType" class="form-select" id="eventType" required>
+                                <option value="">请选择事件类型</option>
+                                <option th:each="type : ${T(com.niit.esports.entity.MatchEvent).getEventTypes()}"
+                                        th:value="${type}"
+                                        th:selected="${matchEvent?.eventType == type}"
+                                        th:text="${T(com.niit.esports.entity.MatchEvent).getEventTypeDisplayName(type)}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- 比赛ID输入 -->
+                        <div class="mb-3">
+                            <label for="matchId" class="form-label">比赛ID *</label>
+                            <input type="text" name="matchId" class="form-control" id="matchId"
+                                   th:value="${matchEvent?.matchId}" required
+                                   placeholder="例如: MATCH_001">
+                            <div class="form-text">请输入比赛ID，如MATCH_001</div>
+                        </div>
+
+                        <!-- 选手ID输入 -->
+                        <div class="mb-3">
+                            <label for="playerId" class="form-label">选手ID *</label>
+                            <input type="text" name="playerId" class="form-control" id="playerId"
+                                   th:value="${matchEvent?.playerId}" required
+                                   placeholder="例如: PLAYER_001">
+                        </div>
+
+                        <!-- 英雄ID输入 -->
+                        <div class="mb-3">
+                            <label for="heroId" class="form-label">英雄ID *</label>
+                            <input type="text" name="heroId" class="form-control" id="heroId"
+                                   th:value="${matchEvent?.heroId}" required
+                                   placeholder="例如: HERO_001">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- 时间戳输入 -->
+                        <div class="mb-3">
+                            <label for="timestampSeconds" class="form-label">比赛时间（秒） *</label>
+                            <input type="number" name="timestampSeconds" class="form-control"
+                                   id="timestampSeconds" min="0" max="3600" required
+                                   th:value="${matchEvent?.timestampSeconds}"
+                                   placeholder="例如: 600 表示 10:00">
+                            <div class="form-text">
+                                当前时间: <span id="timeDisplay">00:00</span>
+                                （格式: 分钟:秒）
+                            </div>
+                        </div>
+
+                        <!-- 金币输入 -->
+                        <div class="mb-3">
+                            <label for="gold" class="form-label">获得金币</label>
+                            <input type="number" name="gold" class="form-control"
+                                   id="gold" min="0"
+                                   th:value="${matchEvent?.gold}"
+                                   placeholder="可选，默认为0">
+                        </div>
+
+                        <!-- 目标选手ID输入 -->
+                        <div class="mb-3" id="targetPlayerSection">
+                            <label for="targetPlayerId" class="form-label">目标选手ID</label>
+                            <input type="text" name="targetPlayerId" class="form-control" id="targetPlayerId"
+                                   th:value="${matchEvent?.targetPlayerId}"
+                                   placeholder="例如: PLAYER_002 (仅击杀/助攻等事件需要)">
+                            <div class="form-text">仅对击杀、助攻等需要目标的事件填写</div>
+                        </div>
+
+                        <!-- 当前表单数据预览 -->
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h6 class="card-title">表单数据预览</h6>
+                                <div class="small">
+                                    <div>事件ID: <span th:text="${matchEvent?.eventId ?: '（新事件）'}"></span></div>
+                                    <div>事件类型: <span th:text="${matchEvent?.eventType ?: '未选择'}"></span></div>
+                                    <div>比赛ID: <span th:text="${matchEvent?.matchId ?: '未填写'}"></span></div>
+                                    <div>选手ID: <span th:text="${matchEvent?.playerId ?: '未填写'}"></span></div>
+                                    <div>英雄ID: <span th:text="${matchEvent?.heroId ?: '未填写'}"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 保存事件
+                    </button>
+                    <a th:href="@{/matches/events}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+            // 实时显示时间格式
+            function updateTimeDisplay() {
+                const seconds = parseInt($('#timestampSeconds').val()) || 0;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                $('#timeDisplay').text(
+                    `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+                );
+            }
+
+            $('#timestampSeconds').on('input', updateTimeDisplay);
+
+            // 初始化时间显示
+            updateTimeDisplay();
+
+            // 表单提交前的验证
+            $('form').on('submit', function(e) {
+                const eventType = $('#eventType').val();
+                const matchId = $('#matchId').val();
+                const playerId = $('#playerId').val();
+                const heroId = $('#heroId').val();
+                const timestamp = $('#timestampSeconds').val();
+
+                // 基本验证
+                if (!eventType) {
+                    alert('请选择事件类型！');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!matchId) {
+                    alert('请输入比赛ID！');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!playerId) {
+                    alert('请输入选手ID！');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!heroId) {
+                    alert('请输入英雄ID！');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!timestamp) {
+                    alert('请输入比赛时间！');
+                    e.preventDefault();
+                    return false;
+                }
+
+                // 特定事件类型的验证
+                const needsTarget = ['KILL', 'ASSIST'];
+                const targetPlayerId = $('#targetPlayerId').val();
+
+                if (needsTarget.includes(eventType) && !targetPlayerId) {
+                    if (!confirm('当前事件类型建议填写目标选手ID，确定要继续提交吗？')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // 显示表单数据变化
+            $('input, select').on('change', function() {
+                console.log('表单数据变化:', {
+                    eventId: $('#eventId').val(),
+                    eventType: $('#eventType').val(),
+                    matchId: $('#matchId').val(),
+                    playerId: $('#playerId').val(),
+                    heroId: $('#heroId').val(),
+                    timestampSeconds: $('#timestampSeconds').val(),
+                    gold: $('#gold').val(),
+                    targetPlayerId: $('#targetPlayerId').val()
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .form-select:required:invalid {
+            color: #6c757d;
+        }
+        .form-select option {
+            color: #000;
+        }
+    </style>
+</div>
+</body>
+</html>
