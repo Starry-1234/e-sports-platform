@@ -11,6 +11,7 @@ public class Match {
     private Date createdAt;
     private String teamAId;
     private String teamBId;
+    private String score; // 新增比分属性
 
     // 关联对象
     private Team teamA;
@@ -120,6 +121,14 @@ public class Match {
     public void setWinnerTeam(Team winnerTeam) {
         this.winnerTeam = winnerTeam;
     }
+    
+    public String getScore() {
+        return score;
+    }
+    
+    public void setScore(String score) {
+        this.score = score;
+    }
 
     // 工具方法：将秒数转换为分钟格式
     public String getFormattedDuration() {
@@ -149,6 +158,7 @@ public class Match {
                 ", createdAt=" + createdAt +
                 ", teamAId='" + teamAId + '\'' +
                 ", teamBId='" + teamBId + '\'' +
+                ", score='" + score + '\'' +
                 '}';
     }
 }

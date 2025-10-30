@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>电竞数据中台 - 首页</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- 欢迎横幅 -->
+    <div class="jumbotron bg-primary text-white rounded p-5 mb-4">
+        <div class="container">
+            <h1 class="display-4">🏆 电竞数据中台</h1>
+            <p class="lead" th:text="${welcomeMessage}">专业的电竞比赛数据采集、分析和展示平台</p>
+            <hr class="my-4">
+            <p>实时监控比赛数据，深度分析选手表现，助力电竞产业发展</p>
+            <a class="btn btn-light btn-lg" th:href="@{/matches/events/match/MATCH_001}" role="button">
+                开始使用 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- 功能卡片 -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-bolt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">实时比赛事件</h5>
+                    <p class="card-text">实时采集和显示比赛中的击杀、推塔、巨龙击杀等重要事件数据</p>
+                    <a th:href="@{/matches/events/match/MATCH_001}" class="btn btn-primary">
+                        <i class="fas fa-list"></i> 查看事件
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">事件统计分析</h5>
+                    <p class="card-text">深度分析比赛数据，生成详细的统计报告和数据可视化图表</p>
+                    <a th:href="@{/matches/events/stats/MATCH_001}" class="btn btn-success">
+                        <i class="fas fa-chart-pie"></i> 查看统计
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-plus-circle fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">添加新事件</h5>
+                    <p class="card-text">手动添加比赛事件，支持多种事件类型，完善数据记录系统</p>
+                    <a th:href="@{/matches/events/add}" class="btn btn-warning">
+                        <i class="fas fa-plus"></i> 添加事件
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据概览 -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-database"></i> 系统数据概览
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-primary">4+</h3>
+                                <p class="text-muted mb-0">已记录比赛</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-success">10+</h3>
+                                <p class="text-muted mb-0">注册选手</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-warning">5+</h3>
+                                <p class="text-muted mb-0">合作战队</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-info">17+</h3>
+                                <p class="text-muted mb-0">比赛事件</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速链接 -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-rocket"></i> 快速访问
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>比赛相关</h6>
+                            <div class="list-group">
+                                <a th:href="@{/matches/events/match/MATCH_001}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-list text-primary"></i> 比赛1 - EDG vs RNG 事件列表
+                                </a>
+                                <a th:href="@{/matches/events/match/MATCH_002}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-list text-success"></i> 比赛2 - EDG vs IG 事件列表
+                                </a>
+                                <a th:href="@{/matches/events/timeline/MATCH_001}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-stream text-info"></i> 比赛时间线展示
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>功能操作</h6>
+                            <div class="list-group">
+                                <a th:href="@{/matches/events/add}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-plus-circle text-warning"></i> 添加新比赛事件
+                                </a>
+                                <a th:href="@{/matches/events/player/PLAYER_001}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-user text-danger"></i> 查看选手Uzi事件记录
+                                </a>
+                                <a th:href="@{/matches/events/stats/MATCH_001}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-chart-bar text-success"></i> 事件统计分析
+                                </a>
+                                <a th:href="@{/analysis/pickban/match/MATCH_001}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-chess-knight text-info"></i> BP分析 - 英雄选择与禁用
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 可以添加页面特定的JavaScript -->
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+            console.log('首页加载完成');
+            // 可以在这里添加首页特定的JavaScript代码
+        });
+    </script>
+</div>
+</body>
+</html>
