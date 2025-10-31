@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>BP统计分析</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>BP统计分析</h1>
+        <div>
+            <a th:href="@{/analysis/pickban/match/{matchId}(matchId=${matchId})}" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> 返回BP详情
+            </a>
+            <a th:href="@{/analysis/pickban}" class="btn btn-outline-secondary">
+                <i class="fas fa-list"></i> 比赛列表
+            </a>
+        </div>
+    </div>
+
+    <!-- 错误信息显示 -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>错误!</strong> <span th:text="${error}">发生错误</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- 统计概览 -->
+    <div class="row mb-4" th:if="${stats}">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-primary" th:text="${stats.totalPicks}">0</h3>
+                    <p class="card-text">总选择数</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-warning" th:text="${stats.totalBans}">0</h3>
+                    <p class="card-text">总禁用数</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-success">8</h3>
+                    <p class="card-text">热门英雄</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-danger">3</h3>
+                    <p class="card-text">冷门英雄</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 热门选择英雄 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-fire"></i> 热门选择英雄
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>英雄</th>
+                            <th>选择次数</th>
+                            <th>选择率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>英雄HERO_1</td>
+                            <td>2</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>英雄HERO_2</td>
+                            <td>2</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>英雄HERO_3</td>
+                            <td>1</td>
+                            <td>10%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 热门禁用英雄 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-ban"></i> 热门禁用英雄
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>英雄</th>
+                            <th>禁用次数</th>
+                            <th>禁用率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>英雄HERO_11</td>
+                            <td>1</td>
+                            <td>16.67%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>英雄HERO_12</td>
+                            <td>1</td>
+                            <td>16.67%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 队伍BP偏好 -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-users"></i> 队伍BP偏好
+            </h5>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="teamTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="team-a-tab" data-bs-toggle="tab" data-bs-target="#team-a" 
+                            type="button" role="tab">队伍A</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="team-b-tab" data-bs-toggle="tab" data-bs-target="#team-b" 
+                            type="button" role="tab">队伍B</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="teamTabContent">
+                <!-- 队伍A -->
+                <div class="tab-pane fade show active" id="team-a" role="tabpanel">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>常用选择</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_1
+                                    <span class="badge bg-primary rounded-pill">2次</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_3
+                                    <span class="badge bg-primary rounded-pill">1次</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>常用禁用</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_11
+                                    <span class="badge bg-warning rounded-pill">1次</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 队伍B -->
+                <div class="tab-pane fade" id="team-b" role="tabpanel">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>常用选择</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_2
+                                    <span class="badge bg-primary rounded-pill">2次</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_4
+                                    <span class="badge bg-primary rounded-pill">1次</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>常用禁用</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    英雄HERO_12
+                                    <span class="badge bg-warning rounded-pill">1次</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+            console.log('BP统计分析页面加载完成');
+        });
+    </script>
+</div>
+</body>
+</html>

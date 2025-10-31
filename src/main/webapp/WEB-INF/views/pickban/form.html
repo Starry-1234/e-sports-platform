@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title th:text="${pageTitle}">添加Pick/Ban</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${pageTitle}">添加Pick/Ban</h1>
+        <div>
+            <a th:href="@{/analysis/pickban/match/{matchId}(matchId=${matchId})}" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> 返回BP列表
+            </a>
+            <a th:href="@{/analysis/pickban}" class="btn btn-outline-secondary">
+                <i class="fas fa-list"></i> 比赛列表
+            </a>
+        </div>
+    </div>
+
+    <!-- 错误信息显示 -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>错误!</strong> <span th:text="${error}">发生错误</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/analysis/pickban/save}" method="post">
+                <!-- 隐藏字段 -->
+                <input type="hidden" name="pickBanId" th:value="${pickBan?.pickBanId}" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- 比赛ID输入 -->
+                        <div class="mb-3">
+                            <label for="matchId" class="form-label">比赛ID *</label>
+                            <input type="text" name="matchId" class="form-control" id="matchId"
+                                   th:value="${pickBan?.matchId ?: matchId}" required
+                                   placeholder="例如: MATCH_001">
+                        </div>
+
+                        <!-- 队伍ID输入 -->
+                        <div class="mb-3">
+                            <label for="teamId" class="form-label">队伍ID *</label>
+                            <select name="teamId" class="form-select" id="teamId" required>
+                                <option value="">请选择队伍</option>
+                                <option value="TEAM_A" th:selected="${pickBan?.teamId == 'TEAM_A'}">队伍A</option>
+                                <option value="TEAM_B" th:selected="${pickBan?.teamId == 'TEAM_B'}">队伍B</option>
+                            </select>
+                        </div>
+
+                        <!-- 英雄ID输入 -->
+                        <div class="mb-3">
+                            <label for="heroId" class="form-label">英雄ID *</label>
+                            <input type="text" name="heroId" class="form-control" id="heroId"
+                                   th:value="${pickBan?.heroId}" required
+                                   placeholder="例如: HERO_001">
+                            <div class="form-text">输入英雄的唯一标识符</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- 操作类型选择 -->
+                        <div class="mb-3">
+                            <label for="action" class="form-label">操作类型 *</label>
+                            <select name="action" class="form-select" id="action" required>
+                                <option value="">请选择操作类型</option>
+                                <option value="PICK" th:selected="${pickBan?.action == 'PICK'}">选择 (PICK)</option>
+                                <option value="BAN" th:selected="${pickBan?.action == 'BAN'}">禁用 (BAN)</option>
+                            </select>
+                        </div>
+
+                        <!-- 顺序输入 -->
+                        <div class="mb-3">
+                            <label for="turn" class="form-label">顺序 *</label>
+                            <input type="number" name="turn" class="form-control" id="turn" min="1" max="30" required
+                                   th:value="${pickBan?.turn}" placeholder="例如: 1">
+                            <div class="form-text">表示选择/禁用的顺序</div>
+                        </div>
+
+                        <!-- 当前表单数据预览 -->
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h6 class="card-title">表单数据预览</h6>
+                                <div class="small">
+                                    <div>记录ID: <span th:text="${pickBan?.pickBanId ?: '（新记录）'}"></span></div>
+                                    <div>比赛ID: <span th:text="${pickBan?.matchId ?: matchId}"></span></div>
+                                    <div>队伍ID: <span th:text="${pickBan?.teamId ?: '未选择'}"></span></div>
+                                    <div>英雄ID: <span th:text="${pickBan?.heroId ?: '未填写'}"></span></div>
+                                    <div>操作类型: <span th:text="${pickBan?.action ?: '未选择'}"></span></div>
+                                    <div>顺序: <span th:text="${pickBan?.turn ?: '未填写'}"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 保存记录
+                    </button>
+                    <a th:href="@{/analysis/pickban/match/{matchId}(matchId=${matchId})}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+            // 表单提交前的验证
+            $('form').on('submit', function(e) {
+                const matchId = $('#matchId').val();
+                const teamId = $('#teamId').val();
+                const heroId = $('#heroId').val();
+                const action = $('#action').val();
+                const turn = $('#turn').val();
+
+                if (!matchId || !teamId || !heroId || !action || !turn) {
+                    alert('请填写所有必填字段');
+                    e.preventDefault();
+                    return false;
+                }
+
+                return true;
+            });
+
+            // 显示表单数据变化
+            $('input, select').on('change', function() {
+                console.log('表单数据变化:', {
+                    pickBanId: $('#pickBanId').val(),
+                    matchId: $('#matchId').val(),
+                    teamId: $('#teamId').val(),
+                    heroId: $('#heroId').val(),
+                    action: $('#action').val(),
+                    turn: $('#turn').val()
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

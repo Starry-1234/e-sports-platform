@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title th:text="${pageTitle}">选择比赛进行BP分析</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${pageTitle}">选择比赛进行BP分析</h1>
+        <a th:href="@{/}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+    </div>
+
+    <!-- 错误信息显示 -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>错误!</strong> <span th:text="${error}">发生错误</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- 比赛列表 -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-list"></i> 比赛列表
+            </h5>
+        </div>
+        <div class="card-body">
+            <div th:if="${#lists.isEmpty(matches)}" class="text-center py-5">
+                <i class="fas fa-inbox fa-3x mb-3 text-muted"></i>
+                <p class="text-muted">暂无比赛数据</p>
+            </div>
+            
+            <div th:unless="${#lists.isEmpty(matches)}" class="row">
+                <div th:each="match : ${matches}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${'比赛: ' + match.matchId}">比赛ID</h5>
+                            <p class="card-text">
+                                <span th:if="${match.teamA != null}" th:text="${match.teamA.teamName}">队伍A</span>
+                                <span> vs </span>
+                                <span th:if="${match.teamB != null}" th:text="${match.teamB.teamName}">队伍B</span>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="far fa-calendar-alt"></i> 
+                                    <span th:text="${#dates.format(match.matchDate, 'yyyy-MM-dd HH:mm')}">比赛时间</span>
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-code-branch"></i> 版本: 
+                                    <span th:text="${match.patchVersion ?: '未知'}">版本</span>
+                                </small>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a th:href="@{/analysis/pickban/match/{matchId}(matchId=${match.matchId})}" 
+                               class="btn btn-primary btn-sm">
+                                <i class="fas fa-chart-bar"></i> BP分析
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+            console.log('比赛列表页面加载完成');
+        });
+    </script>
+</div>
+</body>
+</html>

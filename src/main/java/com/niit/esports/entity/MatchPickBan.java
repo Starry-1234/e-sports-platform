@@ -12,6 +12,9 @@ public class MatchPickBan {
     private Hero hero;
     private Team team;
     private Match match;
+    
+    // 对局信息
+    private Integer roundNumber;
 
     // 构造函数
     public MatchPickBan() {}
@@ -98,6 +101,14 @@ public class MatchPickBan {
     public void setMatch(Match match) {
         this.match = match;
     }
+    
+    public Integer getRoundNumber() {
+        return roundNumber;
+    }
+    
+    public void setRoundNumber(Integer roundNumber) {
+        this.roundNumber = roundNumber;
+    }
 
     // 工具方法：判断是否是选择
     public boolean isPick() {
@@ -113,6 +124,11 @@ public class MatchPickBan {
     public String getActionDescription() {
         return isPick() ? "选择" : "禁用";
     }
+    
+    // 工具方法：获取行动CSS类
+    public String getActionBadgeClass() {
+        return isPick() ? "badge bg-info" : "badge bg-warning text-dark";
+    }
 
     @Override
     public String toString() {
@@ -123,6 +139,7 @@ public class MatchPickBan {
                 ", turn=" + turn +
                 ", matchId='" + matchId + '\'' +
                 ", teamId='" + teamId + '\'' +
+                ", roundNumber=" + roundNumber +
                 '}';
     }
 }
