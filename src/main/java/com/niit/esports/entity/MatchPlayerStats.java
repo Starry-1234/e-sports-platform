@@ -1,43 +1,29 @@
 package com.niit.esports.entity;
 
+import java.math.BigDecimal;
+
 public class MatchPlayerStats {
     private String statsId;
     private Integer kills;
     private Integer deaths;
     private Integer assists;
-    private String goldEarned;
-    private String damageDealt;
-    private String damageTaken;
-    private String visionScore;
+    private BigDecimal goldEarned;
+    private BigDecimal damageDealt;
+    private BigDecimal damageTaken;
+    private BigDecimal visionScore;
     private String matchId;
     private String playerId;
     private String heroId;
-
+    
     // 关联对象
+    private Match match;
     private Player player;
     private Hero hero;
-    private Match match;
 
-    // 构造函数
-    public MatchPlayerStats() {}
-
-    public MatchPlayerStats(String statsId, Integer kills, Integer deaths, Integer assists,
-                            String goldEarned, String damageDealt, String damageTaken,
-                            String visionScore, String matchId, String playerId, String heroId) {
-        this.statsId = statsId;
-        this.kills = kills;
-        this.deaths = deaths;
-        this.assists = assists;
-        this.goldEarned = goldEarned;
-        this.damageDealt = damageDealt;
-        this.damageTaken = damageTaken;
-        this.visionScore = visionScore;
-        this.matchId = matchId;
-        this.playerId = playerId;
-        this.heroId = heroId;
+    public MatchPlayerStats() {
     }
 
-    // Getter和Setter
+    // Getters and Setters
     public String getStatsId() {
         return statsId;
     }
@@ -70,35 +56,35 @@ public class MatchPlayerStats {
         this.assists = assists;
     }
 
-    public String getGoldEarned() {
+    public BigDecimal getGoldEarned() {
         return goldEarned;
     }
 
-    public void setGoldEarned(String goldEarned) {
+    public void setGoldEarned(BigDecimal goldEarned) {
         this.goldEarned = goldEarned;
     }
 
-    public String getDamageDealt() {
+    public BigDecimal getDamageDealt() {
         return damageDealt;
     }
 
-    public void setDamageDealt(String damageDealt) {
+    public void setDamageDealt(BigDecimal damageDealt) {
         this.damageDealt = damageDealt;
     }
 
-    public String getDamageTaken() {
+    public BigDecimal getDamageTaken() {
         return damageTaken;
     }
 
-    public void setDamageTaken(String damageTaken) {
+    public void setDamageTaken(BigDecimal damageTaken) {
         this.damageTaken = damageTaken;
     }
 
-    public String getVisionScore() {
+    public BigDecimal getVisionScore() {
         return visionScore;
     }
 
-    public void setVisionScore(String visionScore) {
+    public void setVisionScore(BigDecimal visionScore) {
         this.visionScore = visionScore;
     }
 
@@ -126,6 +112,14 @@ public class MatchPlayerStats {
         this.heroId = heroId;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -142,41 +136,6 @@ public class MatchPlayerStats {
         this.hero = hero;
     }
 
-    public Match getMatch() {
-        return match;
-    }
-
-    public void setMatch(Match match) {
-        this.match = match;
-    }
-
-    // 工具方法：计算KDA
-    public Double getKDA() {
-        if (deaths == null || deaths == 0) {
-            return kills != null ? kills.doubleValue() + (assists != null ? assists.doubleValue() : 0) : 0.0;
-        }
-        return (kills != null ? kills.doubleValue() : 0) +
-                (assists != null ? assists.doubleValue() : 0) / deaths.doubleValue();
-    }
-
-    // 工具方法：格式化KDA显示
-    public String getFormattedKDA() {
-        return String.format("%d/%d/%d",
-                kills != null ? kills : 0,
-                deaths != null ? deaths : 0,
-                assists != null ? assists : 0);
-    }
-
-    // 工具方法：计算参团率
-    public Double getParticipationRate(Integer teamTotalKills) {
-        if (teamTotalKills == null || teamTotalKills == 0) {
-            return 0.0;
-        }
-        int playerKills = kills != null ? kills : 0;
-        int playerAssists = assists != null ? assists : 0;
-        return (playerKills + playerAssists) * 100.0 / teamTotalKills;
-    }
-
     @Override
     public String toString() {
         return "MatchPlayerStats{" +
@@ -184,10 +143,10 @@ public class MatchPlayerStats {
                 ", kills=" + kills +
                 ", deaths=" + deaths +
                 ", assists=" + assists +
-                ", goldEarned='" + goldEarned + '\'' +
-                ", damageDealt='" + damageDealt + '\'' +
-                ", damageTaken='" + damageTaken + '\'' +
-                ", visionScore='" + visionScore + '\'' +
+                ", goldEarned=" + goldEarned +
+                ", damageDealt=" + damageDealt +
+                ", damageTaken=" + damageTaken +
+                ", visionScore=" + visionScore +
                 ", matchId='" + matchId + '\'' +
                 ", playerId='" + playerId + '\'' +
                 ", heroId='" + heroId + '\'' +

@@ -42,16 +42,28 @@
                         <span th:if="${#lists.size(picks) > 0}" th:text="${#dates.format(picks[0].match.matchTime, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
                         <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}" th:text="${#dates.format(bans[0].match.matchTime, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
                     </p>
-                    <p class="mb-1">
+                    <p class="mb-1 d-flex align-items-center justify-content-center">
                         <span th:if="${#lists.size(picks) > 0}">
+                            <img th:if="${picks[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${picks[0].match.teamA.logoUrl})}" 
+                                 th:alt="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}" 
+                                 class="me-2" style="height: 40px; width: 40px; object-fit: contain;" onerror="this.style.display='none'">
                             <span class="fs-4 text-primary me-4" th:text="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}"></span>
                             <span class="fs-3 fw-bold mx-3" th:text="${picks[0].match.score ?: '0:0'}"></span>
                             <span class="fs-4 text-danger ms-4" th:text="${picks[0].match.teamB?.teamName ?: picks[0].match.teamBId ?: '队伍B'}"></span>
+                            <img th:if="${picks[0].match.teamB?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${picks[0].match.teamB.logoUrl})}" 
+                                 th:alt="${picks[0].match.teamB?.teamName ?: picks[0].match.teamBId ?: '队伍B'}" 
+                                 class="ms-2" style="height: 40px; width: 40px; object-fit: contain;" onerror="this.style.display='none'">
                         </span>
                         <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}">
+                            <img th:if="${bans[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${bans[0].match.teamA.logoUrl})}" 
+                                 th:alt="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}" 
+                                 class="me-2" style="height: 40px; width: 40px; object-fit: contain;" onerror="this.style.display='none'">
                             <span class="fs-4 text-primary me-4" th:text="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}"></span>
                             <span class="fs-3 fw-bold mx-3" th:text="${bans[0].match.score ?: '0:0'}"></span>
                             <span class="fs-4 text-danger ms-4" th:text="${bans[0].match.teamB?.teamName ?: bans[0].match.teamBId ?: '队伍B'}"></span>
+                            <img th:if="${bans[0].match.teamB?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${bans[0].match.teamB.logoUrl})}" 
+                                 th:alt="${bans[0].match.teamB?.teamName ?: bans[0].match.teamBId ?: '队伍B'}" 
+                                 class="ms-2" style="height: 40px; width: 40px; object-fit: contain;" onerror="this.style.display='none'">
                         </span>
                     </p>
                 </div>
@@ -92,10 +104,20 @@
                             <div class="row">
                                 <div class="col-md-6 text-start">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span th:if="${#lists.size(picks) > 0}" class="fs-5 text-primary me-3" 
-                                              th:text="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}"></span>
-                                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}" class="fs-5 text-primary me-3" 
-                                              th:text="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}"></span>
+                                        <span th:if="${#lists.size(picks) > 0}">
+                                            <img th:if="${picks[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${picks[0].match.teamA.logoUrl})}" 
+                                                 th:alt="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}" 
+                                                 class="me-2" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
+                                            <span class="fs-5 text-primary me-3" 
+                                                  th:text="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}"></span>
+                                        </span>
+                                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}">
+                                            <img th:if="${bans[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${bans[0].match.teamA.logoUrl})}" 
+                                                 th:alt="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}" 
+                                                 class="me-2" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
+                                            <span class="fs-5 text-primary me-3" 
+                                                  th:text="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}"></span>
+                                        </span>
                                         <div class="d-flex flex-wrap">
                                             <div th:each="ban : ${roundEntry.value}" th:if="${ban.teamId == 'TEAM_A'}" class="me-2">
                                                 <div class="border rounded p-1 text-center bg-light" style="width: 70px;">
@@ -115,10 +137,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span th:if="${#lists.size(picks) > 0}" class="fs-5 text-danger ms-3" 
-                                              th:text="${picks[0].match.teamB?.teamName ?: picks[0].match.teamBId ?: '队伍B'}"></span>
-                                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}" class="fs-5 text-danger ms-3" 
-                                              th:text="${bans[0].match.teamB?.teamName ?: bans[0].match.teamBId ?: '队伍B'}"></span>
+                                        <span th:if="${#lists.size(picks) > 0}">
+                                            <span class="fs-5 text-danger ms-3" 
+                                                  th:text="${picks[0].match.teamB?.teamName ?: picks[0].match.teamBId ?: '队伍B'}"></span>
+                                            <img th:if="${picks[0].match.teamB?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${picks[0].match.teamB.logoUrl})}" 
+                                                 th:alt="${picks[0].match.teamB?.teamName ?: picks[0].match.teamBId ?: '队伍B'}" 
+                                                 class="ms-2" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
+                                        </span>
+                                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}">
+                                            <span class="fs-5 text-danger ms-3" 
+                                                  th:text="${bans[0].match.teamB?.teamName ?: bans[0].match.teamBId ?: '队伍B'}"></span>
+                                            <img th:if="${bans[0].match.teamB?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${bans[0].match.teamB.logoUrl})}" 
+                                                 th:alt="${bans[0].match.teamB?.teamName ?: bans[0].match.teamBId ?: '队伍B'}" 
+                                                 class="ms-2" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
+                                        </span>
                                     </div>
                                 </div>
                             </div>

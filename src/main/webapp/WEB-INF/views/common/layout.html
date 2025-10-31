@@ -23,9 +23,9 @@
         <div class="navbar-nav">
             <a class="nav-link" th:href="@{/players}">选手档案</a>
             <a class="nav-link" th:href="@{/teams}">战队信息</a>
-            <a class="nav-link" th:href="@{/matches}">比赛数据</a>
             <a class="nav-link" th:href="@{/matches/events}">比赛事件</a>
             <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().contains('/analysis/pickban')} ? 'active'" th:href="@{/analysis/pickban}">BP分析</a>
+            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().contains('/analysis/matchdata')} ? 'active'" th:href="@{/analysis/matchdata}">比赛数据</a>
         </div>
     </div>
 </nav>
