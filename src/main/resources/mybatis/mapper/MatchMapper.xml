@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niit.esports.mapper.MatchMapper">
+
+    <resultMap id="MatchMap" type="Match">
+        <id property="matchId" column="match_id"/>
+        <result property="matchDate" column="match_date"/>
+        <result property="winnerTeamId" column="winner_team_id"/>
+        <result property="durationSeconds" column="duration_seconds"/>
+        <result property="patchVersion" column="patch_version"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="teamAId" column="team_a_id"/>
+        <result property="teamBId" column="team_b_id"/>
+        <result property="score" column="score"/>
+
+        <!-- 关联队伍信息 -->
+        <association property="teamA" javaType="Team">
+            <id property="teamId" column="team_a_id"/>
+            <result property="teamName" column="team_a_name"/>
+            <result property="region" column="team_a_region"/>
+            <result property="logoUrl" column="team_a_logo_url"/>
+        </association>
+
+        <association property="teamB" javaType="Team">
+            <id property="teamId" column="team_b_id"/>
+            <result property="teamName" column="team_b_name"/>
+            <result property="region" column="team_b_region"/>
+            <result property="logoUrl" column="team_b_logo_url"/>
+        </association>
+    </resultMap>
+
+    <!-- 查询所有比赛 -->
+    <select id="findAll" resultMap="MatchMap">
+        SELECT 
+            m.match_id,
+            m.match_date,
+            m.winner_team_id,
+            m.duration_seconds,
+            m.patch_version,
+            m.created_at,
+            m.team_a_id,
+            m.team_b_id,
+            m.score,
+            ta.team_name as team_a_name,
+            ta.region as team_a_region,
+            ta.logo_url as team_a_logo_url,
+            tb.team_name as team_b_name,
+            tb.region as team_b_region,
+            tb.logo_url as team_b_logo_url
+        FROM matchs m
+        LEFT JOIN team ta ON m.team_a_id = ta.team_id
+        LEFT JOIN team tb ON m.team_b_id = tb.team_id
+        ORDER BY m.match_date DESC
+    </select>
+
+    <!-- 根据ID查询比赛 -->
+    <select id="findById" parameterType="String" resultMap="MatchMap">
+        SELECT 
+            m.match_id,
+            m.match_date,
+            m.winner_team_id,
+            m.duration_seconds,
+            m.patch_version,
+            m.created_at,
+            m.team_a_id,
+            m.team_b_id,
+            m.score,
+            ta.team_name as team_a_name,
+            ta.region as team_a_region,
+            ta.logo_url as team_a_logo_url,
+            tb.team_name as team_b_name,
+            tb.region as team_b_region,
+            tb.logo_url as team_b_logo_url
+        FROM matchs m
+        LEFT JOIN team ta ON m.team_a_id = ta.team_id
+        LEFT JOIN team tb ON m.team_b_id = tb.team_id
+        WHERE m.match_id = #{matchId}
+    </select>
+</mapper>
