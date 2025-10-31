@@ -39,8 +39,8 @@
             <div class="row">
                 <div class="col-12">
                     <p class="mb-1">
-                        <span th:if="${#lists.size(picks) > 0}" th:text="${#dates.format(picks[0].match.matchDate, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
-                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}" th:text="${#dates.format(bans[0].match.matchDate, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
+                        <span th:if="${#lists.size(picks) > 0}" th:text="${#dates.format(picks[0].match.matchTime, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
+                        <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}" th:text="${#dates.format(bans[0].match.matchTime, 'yyyy-MM-dd HH:mm')}">2025-10-30 19:30</span>
                     </p>
                     <p class="mb-1">
                         <span th:if="${#lists.size(picks) > 0}">

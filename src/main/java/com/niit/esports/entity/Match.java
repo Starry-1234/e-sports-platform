@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Match {
     private String matchId;
-    private Date matchDate;
+    private Date matchTime;
     private String winnerTeamId;
     private String durationSeconds;
     private String patchVersion;
@@ -21,10 +21,10 @@ public class Match {
     // 构造函数
     public Match() {}
 
-    public Match(String matchId, Date matchDate, String winnerTeamId, String durationSeconds,
+    public Match(String matchId, Date matchTime, String winnerTeamId, String durationSeconds,
                  String patchVersion, Date createdAt, String teamAId, String teamBId) {
         this.matchId = matchId;
-        this.matchDate = matchDate;
+        this.matchTime = matchTime;
         this.winnerTeamId = winnerTeamId;
         this.durationSeconds = durationSeconds;
         this.patchVersion = patchVersion;
@@ -42,12 +42,21 @@ public class Match {
         this.matchId = matchId;
     }
 
+    public Date getMatchTime() {
+        return matchTime;
+    }
+
+    public void setMatchTime(Date matchTime) {
+        this.matchTime = matchTime;
+    }
+
+    // 保持兼容性，提供matchDate的getter和setter
     public Date getMatchDate() {
-        return matchDate;
+        return matchTime;
     }
 
     public void setMatchDate(Date matchDate) {
-        this.matchDate = matchDate;
+        this.matchTime = matchDate;
     }
 
     public String getWinnerTeamId() {
@@ -151,7 +160,7 @@ public class Match {
     public String toString() {
         return "Match{" +
                 "matchId='" + matchId + '\'' +
-                ", matchDate=" + matchDate +
+                ", matchTime=" + matchTime +
                 ", winnerTeamId='" + winnerTeamId + '\'' +
                 ", durationSeconds='" + durationSeconds + '\'' +
                 ", patchVersion='" + patchVersion + '\'' +
