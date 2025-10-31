@@ -26,8 +26,30 @@
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
+        <!-- 初始化连接大小 -->
         <property name="initialSize" value="5"/>
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="5"/>
+        <!-- 最大连接数 -->
         <property name="maxActive" value="20"/>
+        <!-- 获取连接等待超时的时间(毫秒) -->
+        <property name="maxWait" value="60000"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <!-- 验证语句 -->
+        <property name="validationQuery" value="SELECT 1"/>
+        <!-- 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效 -->
+        <property name="testWhileIdle" value="true"/>
+        <!-- 申请连接时执行validationQuery检测连接是否有效 -->
+        <property name="testOnBorrow" value="false"/>
+        <!-- 归还连接时执行validationQuery检测连接是否有效 -->
+        <property name="testOnReturn" value="false"/>
+        <!-- 是否缓存preparedStatement -->
+        <property name="poolPreparedStatements" value="true"/>
+        <!-- 缓存preparedStatement的大小 -->
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
     </bean>
 
     <!-- 事务管理器 -->

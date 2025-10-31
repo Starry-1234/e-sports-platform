@@ -12,7 +12,7 @@
 
     <!-- 文件输出 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/esports</file>
+        <file>logs/esports.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/esports-platform.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -28,11 +28,13 @@
     <!-- 日志级别配置 -->
     <logger name="com.niit.esports" level="DEBUG"/>
     <logger name="org.mybatis" level="DEBUG"/>
-    <logger name="org.springframework" level="INFO"/>
-    <logger name="com.alibaba.druid" level="INFO"/>
+    <logger name="org.springframework" level="DEBUG"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.springframework.context" level="DEBUG"/>
+    <logger name="com.alibaba.druid" level="DEBUG"/>
 
     <!-- 根日志配置 -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>

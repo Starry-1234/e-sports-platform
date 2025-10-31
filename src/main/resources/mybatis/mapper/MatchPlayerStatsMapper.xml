@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niit.esports.mapper.MatchPlayerStatsMapper">
+    
+    <resultMap id="matchPlayerStatsResultMap" type="com.niit.esports.entity.MatchPlayerStats">
+        <id property="statsId" column="stats_id"/>
+        <result property="kills" column="kills"/>
+        <result property="deaths" column="deaths"/>
+        <result property="assists" column="assists"/>
+        <result property="goldEarned" column="gold_earned"/>
+        <result property="damageDealt" column="damage_dealt"/>
+        <result property="damageTaken" column="damage_taken"/>
+        <result property="visionScore" column="vision_score"/>
+        <result property="matchId" column="match_id"/>
+        <result property="playerId" column="player_id"/>
+        <result property="heroId" column="hero_id"/>
+        
+        <!-- 关联查询玩家信息 -->
+        <association property="player" javaType="com.niit.esports.entity.Player">
+            <id property="playerId" column="player_id"/>
+            <result property="gameName" column="game_name"/>
+        </association>
+        
+        <!-- 关联查询英雄信息 -->
+        <association property="hero" javaType="com.niit.esports.entity.Hero">
+            <id property="heroId" column="hero_id"/>
+            <result property="heroName" column="hero_name"/>
+        </association>
+    </resultMap>
+    
+    <select id="getStatsByMatchId" parameterType="string" resultMap="matchPlayerStatsResultMap">
+        SELECT 
+            mps.stats_id,
+            mps.kills,
+            mps.deaths,
+            mps.assists,
+            mps.gold_earned,
+            mps.damage_dealt,
+            mps.damage_taken,
+            mps.vision_score,
+            mps.match_id,
+            mps.player_id,
+            mps.hero_id,
+            p.game_name,
+            h.hero_name
+        FROM match_player_stats mps
+        LEFT JOIN player p ON mps.player_id = p.player_id
+        LEFT JOIN hero h ON mps.hero_id = h.hero_id
+        WHERE mps.match_id = #{matchId}
+        ORDER BY mps.player_id
+    </select>
+    
+    <select id="getStatsById" parameterType="string" resultMap="matchPlayerStatsResultMap">
+        SELECT 
+            stats_id,
+            kills,
+            deaths,
+            assists,
+            gold_earned,
+            damage_dealt,
+            damage_taken,
+            vision_score,
+            match_id,
+            player_id,
+            hero_id
+        FROM match_player_stats
+        WHERE stats_id = #{statsId}
+    </select>
+    
+    <insert id="addStats" parameterType="com.niit.esports.entity.MatchPlayerStats">
+        INSERT INTO match_player_stats (
+            stats_id,
+            kills,
+            deaths,
+            assists,
+            gold_earned,
+            damage_dealt,
+            damage_taken,
+            vision_score,
+            match_id,
+            player_id,
+            hero_id
+        ) VALUES (
+            #{statsId},
+            #{kills},
+            #{deaths},
+            #{assists},
+            #{goldEarned},
+            #{damageDealt},
+            #{damageTaken},
+            #{visionScore},
+            #{matchId},
+            #{playerId},
+            #{heroId}
+        )
+    </insert>
+    
+    <update id="updateStats" parameterType="com.niit.esports.entity.MatchPlayerStats">
+        UPDATE match_player_stats
+        SET 
+            kills = #{kills},
+            deaths = #{deaths},
+            assists = #{assists},
+            gold_earned = #{goldEarned},
+            damage_dealt = #{damageDealt},
+            damage_taken = #{damageTaken},
+            vision_score = #{visionScore},
+            match_id = #{matchId},
+            player_id = #{playerId},
+            hero_id = #{heroId}
+        WHERE stats_id = #{statsId}
+    </update>
+    
+    <delete id="deleteStats" parameterType="string">
+        DELETE FROM match_player_stats
+        WHERE stats_id = #{statsId}
+    </delete>
+</mapper>
