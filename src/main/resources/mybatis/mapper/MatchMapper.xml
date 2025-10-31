@@ -6,7 +6,7 @@
 
     <resultMap id="MatchMap" type="Match">
         <id property="matchId" column="match_id"/>
-        <result property="matchDate" column="match_date"/>
+        <result property="matchTime" column="match_date"/>
         <result property="winnerTeamId" column="winner_team_id"/>
         <result property="durationSeconds" column="duration_seconds"/>
         <result property="patchVersion" column="patch_version"/>

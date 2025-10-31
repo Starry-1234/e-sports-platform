@@ -31,7 +31,7 @@
         <!-- 关联比赛信息 -->
         <association property="match" javaType="Match">
             <id property="matchId" column="match_id"/>
-            <result property="matchDate" column="match_date"/>
+            <result property="matchTime" column="match_date"/>
             <result property="durationSeconds" column="duration_seconds"/>
             <result property="score" column="score"/>
             <result property="teamAId" column="team_a_id"/>
