@@ -6,7 +6,7 @@
 
     <resultMap id="MatchMap" type="Match">
         <id property="matchId" column="match_id"/>
-        <result property="matchTime" column="match_date"/>
+        <result property="matchTime" column="match_time"/>
         <result property="winnerTeamId" column="winner_team_id"/>
         <result property="durationSeconds" column="duration_seconds"/>
         <result property="patchVersion" column="patch_version"/>
@@ -32,10 +32,10 @@
     </resultMap>
 
     <!-- 查询所有比赛 -->
-    <select id="findAll" resultMap="MatchMap">
+    <select id="selectAllMatches" resultMap="MatchMap">
         SELECT 
             m.match_id,
-            m.match_date,
+            m.match_time,
             m.winner_team_id,
             m.duration_seconds,
             m.patch_version,
@@ -52,14 +52,14 @@
         FROM matchs m
         LEFT JOIN team ta ON m.team_a_id = ta.team_id
         LEFT JOIN team tb ON m.team_b_id = tb.team_id
-        ORDER BY m.match_date DESC
+        ORDER BY m.match_time DESC
     </select>
 
     <!-- 根据ID查询比赛 -->
-    <select id="findById" parameterType="String" resultMap="MatchMap">
+    <select id="selectMatchById" parameterType="String" resultMap="MatchMap">
         SELECT 
             m.match_id,
-            m.match_date,
+            m.match_time,
             m.winner_team_id,
             m.duration_seconds,
             m.patch_version,
@@ -77,5 +77,29 @@
         LEFT JOIN team ta ON m.team_a_id = ta.team_id
         LEFT JOIN team tb ON m.team_b_id = tb.team_id
         WHERE m.match_id = #{matchId}
+    </select>
+
+    <!-- 查询包含队伍信息的比赛列表 -->
+    <select id="selectMatchesWithTeamInfo" resultMap="MatchMap">
+        SELECT
+            m.match_id,
+            m.match_time,
+            m.winner_team_id,
+            m.duration_seconds,
+            m.patch_version,
+            m.created_at,
+            m.team_a_id,
+            m.team_b_id,
+            m.score,
+            ta.team_name as team_a_name,
+            ta.region as team_a_region,
+            ta.logo_url as team_a_logo_url,
+            tb.team_name as team_b_name,
+            tb.region as team_b_region,
+            tb.logo_url as team_b_logo_url
+        FROM matchs m
+                 LEFT JOIN team ta ON m.team_a_id = ta.team_id
+                 LEFT JOIN team tb ON m.team_b_id = tb.team_id
+        ORDER BY m.match_time DESC
     </select>
 </mapper>

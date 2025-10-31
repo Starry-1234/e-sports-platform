@@ -1,6 +1,7 @@
 package com.niit.esports.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Match {
     private String matchId;
@@ -17,6 +18,9 @@ public class Match {
     private Team teamA;
     private Team teamB;
     private Team winnerTeam;
+    
+    // 小局比分列表
+    private List<String> roundScores;
 
     // 构造函数
     public Match() {}
@@ -137,6 +141,14 @@ public class Match {
     
     public void setScore(String score) {
         this.score = score;
+    }
+    
+    public List<String> getRoundScores() {
+        return roundScores;
+    }
+    
+    public void setRoundScores(List<String> roundScores) {
+        this.roundScores = roundScores;
     }
 
     // 工具方法：将秒数转换为分钟格式
