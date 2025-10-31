@@ -4,16 +4,16 @@ public class Hero {
     private String heroId;
     private String heroName;
     private String role;
-    private String avatarUrl;
+    private String avaterUrl;
 
     // 构造函数
     public Hero() {}
 
-    public Hero(String heroId, String heroName, String role, String avatarUrl) {
+    public Hero(String heroId, String heroName, String role, String avaterUrl) {
         this.heroId = heroId;
         this.heroName = heroName;
         this.role = role;
-        this.avatarUrl = avatarUrl;
+        this.avaterUrl = avaterUrl;
     }
 
     // Getter和Setter
@@ -42,11 +42,11 @@ public class Hero {
     }
 
     public String getAvatarUrl() {
-        return avatarUrl;
+        return avaterUrl;
     }
 
     public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+        this.avaterUrl = avatarUrl;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Hero {
                 "heroId='" + heroId + '\'' +
                 ", heroName='" + heroName + '\'' +
                 ", role='" + role + '\'' +
-                ", avatarUrl='" + avatarUrl + '\'' +
+                ", avatarUrl='" + avaterUrl + '\'' +
                 '}';
     }
 }

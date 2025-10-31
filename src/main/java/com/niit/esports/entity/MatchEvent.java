@@ -2,57 +2,57 @@ package com.niit.esports.entity;
 
 public class MatchEvent {
 
-    // === 事件类型常量 ===
-    public static final String EVENT_KILL = "KILL";
-    public static final String EVENT_DEATH = "DEATH";
-    public static final String EVENT_ASSIST = "ASSIST";
-    public static final String EVENT_TOWER_DESTROY = "TOWER_DESTROY";
-    public static final String EVENT_DRAGON_KILL = "DRAGON_KILL";
-    public static final String EVENT_BARON_KILL = "BARON_KILL";
-    public static final String EVENT_INHIBITOR_DESTROY = "INHIBITOR_DESTROY";
-    public static final String EVENT_HERO_SWAP = "HERO_SWAP";
-    public static final String EVENT_ITEM_PURCHASE = "ITEM_PURCHASE";
-    public static final String EVENT_LEVEL_UP = "LEVEL_UP";
+    // === 数据库中的实际事件类型 ===
+    public static final String EVENT_FIRST_BLOOD = "FIRST_BLOOD";
+    public static final String EVENT_DRAGON_OCEAN = "DRAGON_OCEAN";
+    public static final String EVENT_DRAGON_INFERNAL = "DRAGON_INFERNAL";
+    public static final String EVENT_DRAGON_MOUNTAIN = "DRAGON_MOUNTAIN";
+    public static final String EVENT_DRAGON_CLOUD = "DRAGON_CLOUD";
+    public static final String EVENT_HERALD = "HERALD";
+    public static final String EVENT_FIRST_TOWER = "FIRST_TOWER";
+    public static final String EVENT_BARON = "BARON";
+    public static final String EVENT_ELDER_DRAGON = "ELDER_DRAGON";
+    public static final String EVENT_ACE = "ACE";
 
     // 获取所有事件类型的方法
     public static String[] getEventTypes() {
         return new String[]{
-                EVENT_KILL,
-                EVENT_DEATH,
-                EVENT_ASSIST,
-                EVENT_TOWER_DESTROY,
-                EVENT_DRAGON_KILL,
-                EVENT_BARON_KILL,
-                EVENT_INHIBITOR_DESTROY,
-                EVENT_HERO_SWAP,
-                EVENT_ITEM_PURCHASE,
-                EVENT_LEVEL_UP
+                EVENT_FIRST_BLOOD,
+                EVENT_DRAGON_OCEAN,
+                EVENT_DRAGON_INFERNAL,
+                EVENT_DRAGON_MOUNTAIN,
+                EVENT_DRAGON_CLOUD,
+                EVENT_HERALD,
+                EVENT_FIRST_TOWER,
+                EVENT_BARON,
+                EVENT_ELDER_DRAGON,
+                EVENT_ACE
         };
     }
 
     // 获取事件类型显示名称的方法
     public static String getEventTypeDisplayName(String eventType) {
         switch (eventType) {
-            case EVENT_KILL:
-                return "击杀";
-            case EVENT_DEATH:
-                return "死亡";
-            case EVENT_ASSIST:
-                return "助攻";
-            case EVENT_TOWER_DESTROY:
-                return "推塔";
-            case EVENT_DRAGON_KILL:
-                return "击杀巨龙";
-            case EVENT_BARON_KILL:
-                return "击杀男爵";
-            case EVENT_INHIBITOR_DESTROY:
-                return "摧毁水晶";
-            case EVENT_HERO_SWAP:
-                return "英雄交换";
-            case EVENT_ITEM_PURCHASE:
-                return "购买装备";
-            case EVENT_LEVEL_UP:
-                return "升级";
+            case EVENT_FIRST_BLOOD:
+                return "一血";
+            case EVENT_DRAGON_OCEAN:
+                return "海洋亚龙";
+            case EVENT_DRAGON_INFERNAL:
+                return "炼狱亚龙";
+            case EVENT_DRAGON_MOUNTAIN:
+                return "山脉亚龙";
+            case EVENT_DRAGON_CLOUD:
+                return "云端亚龙";
+            case EVENT_HERALD:
+                return "峡谷先锋";
+            case EVENT_FIRST_TOWER:
+                return "一塔";
+            case EVENT_BARON:
+                return "纳什男爵";
+            case EVENT_ELDER_DRAGON:
+                return "远古巨龙";
+            case EVENT_ACE:
+                return "团灭";
             default:
                 return eventType;
         }
@@ -72,6 +72,11 @@ public class MatchEvent {
     private Player player;
     private Player targetPlayer;
     private Match match;
+
+    // 关联字段（用于显示）
+    private String heroName;
+    private String playerName;
+    private String targetPlayerName;
 
     // 构造函数
     public MatchEvent() {}
@@ -185,6 +190,30 @@ public class MatchEvent {
         this.match = match;
     }
 
+    public String getHeroName() {
+        return heroName;
+    }
+
+    public void setHeroName(String heroName) {
+        this.heroName = heroName;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getTargetPlayerName() {
+        return targetPlayerName;
+    }
+
+    public void setTargetPlayerName(String targetPlayerName) {
+        this.targetPlayerName = targetPlayerName;
+    }
+
     // 工具方法：将秒数转换为分钟:秒格式
     public String getFormattedTime() {
         try {
@@ -199,48 +228,45 @@ public class MatchEvent {
 
     // 工具方法：获取事件描述
     public String getEventDescription() {
-        if (player == null) {
-            return eventType;
+        String displayName = getEventTypeDisplayName(eventType);
+
+        if (playerName != null) {
+            switch (eventType) {
+                case EVENT_FIRST_BLOOD:
+                    return playerName + " 拿到一血" + (targetPlayerName != null ? "（击杀 " + targetPlayerName + "）" : "");
+                case EVENT_ACE:
+                    return playerName + " 完成团灭";
+                default:
+                    return playerName + " " + displayName;
+            }
         }
 
-        String playerName = player.getGameName();
-        String targetName = targetPlayer != null ? targetPlayer.getGameName() : "敌方";
-
-        switch (eventType) {
-            case "KILL":
-                return playerName + " 击杀了 " + targetName;
-            case "DEATH":
-                return playerName + " 被击杀";
-            case "ASSIST":
-                return playerName + " 提供了助攻";
-            case "TOWER_DESTROY":
-                return playerName + " 摧毁了防御塔";
-            case "DRAGON_KILL":
-                return playerName + " 击杀了巨龙";
-            case "BARON_KILL":
-                return playerName + " 击杀了男爵";
-            case "INHIBITOR_DESTROY":
-                return playerName + " 摧毁了水晶";
-            default:
-                return playerName + " " + eventType;
-        }
+        return displayName;
     }
 
     // 工具方法：获取事件图标类
     public String getEventIconClass() {
         switch (eventType) {
-            case "KILL":
-                return "fas fa-skull text-danger";
-            case "DEATH":
-                return "fas fa-times-circle text-dark";
-            case "ASSIST":
-                return "fas fa-handshake text-info";
-            case "TOWER_DESTROY":
+            case EVENT_FIRST_BLOOD:
+                return "fas fa-tint text-danger";
+            case EVENT_DRAGON_OCEAN:
+                return "fas fa-water text-primary";
+            case EVENT_DRAGON_INFERNAL:
+                return "fas fa-fire text-danger";
+            case EVENT_DRAGON_MOUNTAIN:
+                return "fas fa-mountain text-warning";
+            case EVENT_DRAGON_CLOUD:
+                return "fas fa-cloud text-info";
+            case EVENT_HERALD:
+                return "fas fa-eye text-success";
+            case EVENT_FIRST_TOWER:
                 return "fas fa-fort-awesome text-warning";
-            case "DRAGON_KILL":
-                return "fas fa-dragon text-success";
-            case "BARON_KILL":
+            case EVENT_BARON:
                 return "fas fa-crown text-purple";
+            case EVENT_ELDER_DRAGON:
+                return "fas fa-dragon text-danger";
+            case EVENT_ACE:
+                return "fas fa-skull-crossbones text-dark";
             default:
                 return "fas fa-circle text-secondary";
         }

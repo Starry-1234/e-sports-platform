@@ -17,7 +17,7 @@
             <id property="heroId" column="hero_id"/>
             <result property="heroName" column="hero_name"/>
             <result property="role" column="role"/>
-            <result property="avatarUrl" column="avater_url"/>
+            <result property="avaterUrl" column="avater_url"/>
         </association>
         
         <!-- 关联队伍信息 -->

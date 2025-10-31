@@ -9,37 +9,20 @@ import java.util.Map;
 @Service
 public interface MatchEventService {
 
-    // 基本CRUD
-    List<MatchEvent> getAllEvents();
+    // 基本CRUD操作
     MatchEvent getEventById(String eventId);
     void addEvent(MatchEvent matchEvent);
     void updateEvent(MatchEvent matchEvent);
     void deleteEvent(String eventId);
 
-    // 业务方法
+    // 核心查询方法
     List<MatchEvent> getEventsByMatch(String matchId);
     List<MatchEvent> getEventsByPlayer(String playerId);
     List<MatchEvent> getEventsByMatchAndType(String matchId, String eventType);
-    List<MatchEvent> getKillEvents(String matchId);
-    List<MatchEvent> getImportantEvents(String matchId);
 
     // 统计方法
-    Map<String, Object> getMatchEventStats(String matchId);
-    Map<String, Object> getPlayerEventStats(String matchId, String playerId);
+    List<Map<String, Object>> getEventStatsByMatch(String matchId);
 
-    // 实时数据
-    List<MatchEvent> getRecentEvents(String matchId, String lastEventId);
-
-    // 时间线
-    List<MatchEvent> getMatchTimeline(String matchId);
-
-    // 分页查询
-    List<MatchEvent> getEventsByMatchWithPage(String matchId, int page, int size);
-    int getEventCountByMatch(String matchId);
-
-    // 选手比赛事件
-    List<MatchEvent> getEventsByMatchAndPlayer(String matchId, String playerId);
-
-    // 批量操作
-    void batchInsertEvents(List<MatchEvent> events);
+    // 获取带详情的事件列表（用于事件列表页面）
+    List<MatchEvent> getEventsWithDetails(String matchId);
 }

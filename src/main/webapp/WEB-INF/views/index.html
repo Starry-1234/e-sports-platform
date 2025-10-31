@@ -3,163 +3,185 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout}">
 <head>
-    <title>电竞数据中台 - 首页</title>
+    <title>首页 - 电竞数据中台</title>
 </head>
 <body>
+
 <div layout:fragment="content">
     <!-- 欢迎横幅 -->
-    <div class="jumbotron bg-primary text-white rounded p-5 mb-4">
+    <section class="hero-section bg-primary text-white py-5 mb-5 rounded">
         <div class="container">
-            <h1 class="display-4">🏆 电竞数据中台</h1>
-            <p class="lead" th:text="${welcomeMessage}">专业的电竞比赛数据采集、分析和展示平台</p>
-            <hr class="my-4">
-            <p>实时监控比赛数据，深度分析选手表现，助力电竞产业发展</p>
-            <a class="btn btn-light btn-lg" th:href="@{/matches/events/match/MATCH_001}" role="button">
-                开始使用 <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-
-    <!-- 功能卡片 -->
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-bolt fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">实时比赛事件</h5>
-                    <p class="card-text">实时采集和显示比赛中的击杀、推塔、巨龙击杀等重要事件数据</p>
-                    <a th:href="@{/matches/events/match/MATCH_001}" class="btn btn-primary">
-                        <i class="fas fa-list"></i> 查看事件
-                    </a>
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-chart-line me-3"></i>欢迎来到电竞数据中台
+                    </h1>
+                    <p class="lead mb-4">专业的电子竞技比赛数据分析平台，为战队、教练和分析师提供深度数据洞察</p>
+                    <div class="d-flex gap-3">
+                        <a th:href="@{/matches}" class="btn btn-light btn-lg">
+                            <i class="fas fa-play-circle me-2"></i>查看比赛数据
+                        </a>
+                        <a th:href="@{/analysis/pickban}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-chess me-2"></i>BP分析
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-database display-1 opacity-75"></i>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-bar fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">事件统计分析</h5>
-                    <p class="card-text">深度分析比赛数据，生成详细的统计报告和数据可视化图表</p>
-                    <a th:href="@{/matches/events/stats/MATCH_001}" class="btn btn-success">
-                        <i class="fas fa-chart-pie"></i> 查看统计
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-plus-circle fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">添加新事件</h5>
-                    <p class="card-text">手动添加比赛事件，支持多种事件类型，完善数据记录系统</p>
-                    <a th:href="@{/matches/events/add}" class="btn btn-warning">
-                        <i class="fas fa-plus"></i> 添加事件
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 数据概览 -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-database"></i> 系统数据概览
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <div class="border rounded p-3">
-                                <h3 class="text-primary">4+</h3>
-                                <p class="text-muted mb-0">已记录比赛</p>
+    <!-- 功能介绍 -->
+    <section class="features-section mb-5">
+        <div class="container">
+            <h2 class="text-center mb-5">平台功能特色</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-list-alt fa-2x"></i>
                             </div>
+                            <h4 class="card-title">比赛数据管理</h4>
+                            <p class="card-text">完整的比赛信息记录，包括战队、选手、比分、时长等详细数据</p>
                         </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3">
-                                <h3 class="text-success">10+</h3>
-                                <p class="text-muted mb-0">注册选手</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chess-board fa-2x"></i>
                             </div>
+                            <h4 class="card-title">BP策略分析</h4>
+                            <p class="card-text">深度分析英雄选择与禁用模式，为战队制定最优BP策略提供数据支持</p>
                         </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3">
-                                <h3 class="text-warning">5+</h3>
-                                <p class="text-muted mb-0">合作战队</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chart-bar fa-2x"></i>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3">
-                                <h3 class="text-info">17+</h3>
-                                <p class="text-muted mb-0">比赛事件</p>
-                            </div>
+                            <h4 class="card-title">事件追踪</h4>
+                            <p class="card-text">记录比赛中的关键事件时间线，包括击杀、资源控制、团战等</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 快速链接 -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-rocket"></i> 快速访问
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>比赛相关</h6>
-                            <div class="list-group">
-                                <a th:href="@{/matches/events/match/MATCH_001}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-list text-primary"></i> 比赛1 - EDG vs RNG 事件列表
-                                </a>
-                                <a th:href="@{/matches/events/match/MATCH_002}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-list text-success"></i> 比赛2 - EDG vs IG 事件列表
-                                </a>
-                                <a th:href="@{/matches/events/timeline/MATCH_001}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-stream text-info"></i> 比赛时间线展示
-                                </a>
-                            </div>
+    <!-- 数据统计 -->
+    <section class="stats-section mb-5">
+        <div class="container">
+            <h2 class="text-center mb-5">数据概览</h2>
+            <div class="row g-4">
+                <div class="col-md-3 col-6">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                            <h3 class="text-primary" th:text="${teamCount != null ? teamCount : '8'}">8</h3>
+                            <p class="text-muted">参赛战队</p>
                         </div>
-                        <div class="col-md-6">
-                            <h6>功能操作</h6>
-                            <div class="list-group">
-                                <a th:href="@{/matches/events/add}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-plus-circle text-warning"></i> 添加新比赛事件
-                                </a>
-                                <a th:href="@{/matches/events/player/PLAYER_001}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user text-danger"></i> 查看选手Uzi事件记录
-                                </a>
-                                <a th:href="@{/matches/events/stats/MATCH_001}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-chart-bar text-success"></i> 事件统计分析
-                                </a>
-                                <a th:href="@{/analysis/pickban/match/MATCH_001}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-chess-knight text-info"></i> BP分析 - 英雄选择与禁用
-                                </a>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-user fa-2x text-success mb-3"></i>
+                            <h3 class="text-success" th:text="${playerCount != null ? playerCount : '40'}">40</h3>
+                            <p class="text-muted">职业选手</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-gamepad fa-2x text-info mb-3"></i>
+                            <h3 class="text-info" th:text="${matchCount != null ? matchCount : '3'}">3</h3>
+                            <p class="text-muted">比赛记录</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-shield-alt fa-2x text-warning mb-3"></i>
+                            <h3 class="text-warning" th:text="${heroCount != null ? heroCount : '168'}">168</h3>
+                            <p class="text-muted">可用英雄</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- 使用指南 -->
+    <section class="guide-section">
+        <div class="container">
+            <h2 class="text-center mb-5">如何使用平台</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">1</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5>浏览比赛数据</h5>
+                            <p class="text-muted">在"比赛数据"页面查看所有比赛的基本信息，包括比分、时长和参赛战队。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">2</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5>分析比赛事件</h5>
+                            <p class="text-muted">通过"比赛事件"页面查看详细的时间线，了解比赛中的关键节点和战术执行。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-info rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">3</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5>研究BP策略</h5>
+                            <p class="text-muted">使用"BP分析"功能深入了解各战队的英雄选择和禁用偏好。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">4</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5>探索选手档案</h5>
+                            <p class="text-muted">查看选手的个人信息和比赛统计数据，了解各选手的技术特点。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
-<!-- 可以添加页面特定的JavaScript -->
 <div layout:fragment="scripts">
     <script>
+        // 首页特定的JavaScript代码可以放在这里
         $(document).ready(function() {
-            console.log('首页加载完成');
-            // 可以在这里添加首页特定的JavaScript代码
+            console.log('电竞数据中台首页加载完成');
         });
     </script>
 </div>
+
 </body>
 </html>

@@ -17,80 +17,97 @@
         <association property="hero" javaType="Hero">
             <id property="heroId" column="hero_id"/>
             <result property="heroName" column="hero_name"/>
-            <result property="role" column="role"/>
-            <result property="avatarUrl" column="avater_url"/>
         </association>
 
         <!-- 关联选手信息 -->
         <association property="player" javaType="Player">
             <id property="playerId" column="player_id"/>
             <result property="gameName" column="player_game_name"/>
-            <result property="position" column="player_position"/>
-            <result property="nationality" column="player_nationality"/>
         </association>
 
         <!-- 关联目标选手信息 -->
         <association property="targetPlayer" javaType="Player">
             <id property="playerId" column="target_player_id"/>
             <result property="gameName" column="target_game_name"/>
-            <result property="position" column="target_position"/>
-            <result property="nationality" column="target_nationality"/>
         </association>
 
         <!-- 关联比赛信息 -->
         <association property="match" javaType="Match">
             <id property="matchId" column="match_id"/>
-            <result property="matchDate" column="match_date"/>
-            <result property="durationSeconds" column="duration_seconds"/>
+            <result property="matchTime" column="match_time"/>
+            <result property="teamAId" column="team_a_id"/>
+            <result property="teamBId" column="team_b_id"/>
+            <result property="score" column="score"/>
+            <association property="teamA" javaType="Team">
+                <id property="teamId" column="team_a_id"/>
+                <result property="teamName" column="team_a_name"/>
+            </association>
+            <association property="teamB" javaType="Team">
+                <id property="teamId" column="team_b_id"/>
+                <result property="teamName" column="team_b_name"/>
+            </association>
         </association>
     </resultMap>
-
-    <!-- 查询所有事件 -->
-    <select id="findAll" resultMap="MatchEventMap">
-        SELECT * FROM match_event
-    </select>
 
     <!-- 根据ID查询事件 -->
     <select id="findById" parameterType="String" resultMap="MatchEventMap">
         SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-        WHERE me.event_id = #{eventId}
-    </select>
-
-    <!-- 根据比赛ID查询事件 -->
-    <select id="findByMatchId" parameterType="String" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
+               h.hero_name,
+               p.game_name as player_game_name,
+               tp.game_name as target_game_name,
+               m.match_time, m.team_a_id, m.team_b_id, m.score,
+               ta.team_name as team_a_name,
+               tb.team_name as team_b_name
         FROM match_event me
                  LEFT JOIN hero h ON me.hero_id = h.hero_id
                  LEFT JOIN player p ON me.player_id = p.player_id
                  LEFT JOIN player tp ON me.target_player_id = tp.player_id
                  LEFT JOIN matchs m ON me.match_id = m.match_id
+                 LEFT JOIN team ta ON m.team_a_id = ta.team_id
+                 LEFT JOIN team tb ON m.team_b_id = tb.team_id
+        WHERE me.event_id = #{eventId}
+    </select>
+
+    <!-- 根据比赛ID查询事件（按事件ID排序） -->
+    <select id="findByMatchId" parameterType="String" resultMap="MatchEventMap">
+        SELECT me.*,
+               h.hero_name,
+               p.game_name as player_game_name,
+               tp.game_name as target_game_name,
+               m.match_time, m.team_a_id, m.team_b_id, m.score,
+               ta.team_name as team_a_name,
+               tb.team_name as team_b_name
+        FROM match_event me
+                 LEFT JOIN hero h ON me.hero_id = h.hero_id
+                 LEFT JOIN player p ON me.player_id = p.player_id
+                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
+                 LEFT JOIN matchs m ON me.match_id = m.match_id
+                 LEFT JOIN team ta ON m.team_a_id = ta.team_id
+                 LEFT JOIN team tb ON m.team_b_id = tb.team_id
         WHERE me.match_id = #{matchId}
-        ORDER BY me.timestamp_seconds ASC
+        ORDER BY
+            -- 先按事件ID排序（确保分组顺序）
+            CAST(REPLACE(me.event_id, 'EVENT_', '') AS UNSIGNED) ASC,
+            -- 再按时间排序（确保显示顺序）
+            CAST(me.timestamp_seconds AS UNSIGNED) ASC
     </select>
 
     <!-- 根据选手ID查询事件 -->
     <select id="findByPlayerId" parameterType="String" resultMap="MatchEventMap">
         SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
+               h.hero_name,
+               p.game_name as player_game_name,
+               tp.game_name as target_game_name,
+               m.match_time, m.team_a_id, m.team_b_id, m.score,
+               ta.team_name as team_a_name,
+               tb.team_name as team_b_name
         FROM match_event me
                  LEFT JOIN hero h ON me.hero_id = h.hero_id
                  LEFT JOIN player p ON me.player_id = p.player_id
                  LEFT JOIN player tp ON me.target_player_id = tp.player_id
                  LEFT JOIN matchs m ON me.match_id = m.match_id
+                 LEFT JOIN team ta ON m.team_a_id = ta.team_id
+                 LEFT JOIN team tb ON m.team_b_id = tb.team_id
         WHERE me.player_id = #{playerId}
         ORDER BY me.timestamp_seconds DESC
     </select>
@@ -98,50 +115,21 @@
     <!-- 根据比赛和事件类型查询 -->
     <select id="findByMatchIdAndType" resultMap="MatchEventMap">
         SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
+               h.hero_name,
+               p.game_name as player_game_name,
+               tp.game_name as target_game_name,
+               m.match_time, m.team_a_id, m.team_b_id, m.score,
+               ta.team_name as team_a_name,
+               tb.team_name as team_b_name
         FROM match_event me
                  LEFT JOIN hero h ON me.hero_id = h.hero_id
                  LEFT JOIN player p ON me.player_id = p.player_id
                  LEFT JOIN player tp ON me.target_player_id = tp.player_id
                  LEFT JOIN matchs m ON me.match_id = m.match_id
+                 LEFT JOIN team ta ON m.team_a_id = ta.team_id
+                 LEFT JOIN team tb ON m.team_b_id = tb.team_id
         WHERE me.match_id = #{matchId} AND me.event_type = #{eventType}
-        ORDER BY me.timestamp_seconds ASC
-    </select>
-
-    <!-- 获取击杀事件 -->
-    <select id="findKillEvents" parameterType="String" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId} AND me.event_type = 'KILL'
-        ORDER BY me.timestamp_seconds ASC
-    </select>
-
-    <!-- 获取重要事件 -->
-    <select id="findImportantEvents" parameterType="String" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId}
-          AND me.event_type IN ('KILL', 'DRAGON_KILL', 'BARON_KILL', 'TOWER_DESTROY', 'INHIBITOR_DESTROY')
-        ORDER BY me.timestamp_seconds ASC
+        ORDER BY CAST(me.timestamp_seconds AS UNSIGNED) ASC
     </select>
 
     <!-- 获取比赛事件统计 -->
@@ -154,95 +142,6 @@
         WHERE match_id = #{matchId}
         GROUP BY event_type
         ORDER BY event_count DESC
-    </select>
-
-    <!-- 获取选手事件统计 -->
-    <select id="getPlayerEventStats" resultType="map">
-        SELECT
-            p.game_name,
-            p.position,
-            h.hero_name,
-            COUNT(*) as total_events,
-            SUM(CASE WHEN me.event_type = 'KILL' THEN 1 ELSE 0 END) as kills,
-            SUM(CASE WHEN me.event_type = 'DEATH' THEN 1 ELSE 0 END) as deaths,
-            SUM(CASE WHEN me.event_type = 'ASSIST' THEN 1 ELSE 0 END) as assists,
-            SUM(CAST(me.gold as UNSIGNED)) as total_gold
-        FROM match_event me
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-        WHERE me.match_id = #{matchId} AND me.player_id = #{playerId}
-        GROUP BY me.player_id, me.hero_id
-    </select>
-
-    <!-- 获取最近事件（用于实时更新） -->
-    <select id="findRecentEvents" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId}
-          AND me.event_id > #{lastEventId}
-        ORDER BY me.timestamp_seconds ASC
-    </select>
-
-    <!-- 获取比赛时间线 -->
-    <select id="getMatchTimeline" parameterType="String" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId}
-        ORDER BY me.timestamp_seconds ASC
-    </select>
-
-    <!-- 分页查询比赛事件 -->
-    <select id="findByMatchIdWithPage" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId}
-        ORDER BY me.timestamp_seconds ASC
-            LIMIT #{offset}, #{limit}
-    </select>
-
-    <!-- 统计比赛事件数量 -->
-    <select id="countByMatchId" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM match_event WHERE match_id = #{matchId}
-    </select>
-
-    <!-- 获取选手在某场比赛中的事件 -->
-    <select id="findByMatchAndPlayer" resultMap="MatchEventMap">
-        SELECT me.*,
-               h.hero_name, h.role, h.avater_url,
-               p.game_name as player_game_name, p.position as player_position, p.nationality as player_nationality,
-               tp.game_name as target_game_name, tp.position as target_position, tp.nationality as target_nationality,
-               m.match_date, m.duration_seconds
-        FROM match_event me
-                 LEFT JOIN hero h ON me.hero_id = h.hero_id
-                 LEFT JOIN player p ON me.player_id = p.player_id
-                 LEFT JOIN player tp ON me.target_player_id = tp.player_id
-                 LEFT JOIN matchs m ON me.match_id = m.match_id
-        WHERE me.match_id = #{matchId} AND me.player_id = #{playerId}
-        ORDER BY me.timestamp_seconds ASC
     </select>
 
     <!-- 插入事件 -->
