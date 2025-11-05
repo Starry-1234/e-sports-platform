@@ -3,7 +3,7 @@ package com.niit.esports.entity;
 import java.util.Date;
 
 public class Team {
-    private String teamId;
+    private int teamId;
     private String teamName;
     private String region;
     private String logoUrl;
@@ -12,7 +12,7 @@ public class Team {
     // 构造函数
     public Team() {}
 
-    public Team(String teamId, String teamName, String region, String logoUrl, Date createdAt) {
+    public Team(int teamId, String teamName, String region, String logoUrl, Date createdAt) {
         this.teamId = teamId;
         this.teamName = teamName;
         this.region = region;
@@ -21,11 +21,11 @@ public class Team {
     }
 
     // Getter和Setter
-    public String getTeamId() {
+    public int getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(String teamId) {
+    public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
 

@@ -8,4 +8,11 @@ import java.util.List;
 public interface TeamMapper {
     List<Team> selectAllTeams();
     int selectTeamCount();
+
+    List<Team> findAll();
+    List<Team> findByName(String teamName);
+    Team findById(int teamId);
+    void insert(Team team);
+    void update(Team team);
+    void delete(int teamId);
 }
