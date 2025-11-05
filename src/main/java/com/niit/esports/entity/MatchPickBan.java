@@ -7,6 +7,7 @@ public class MatchPickBan {
     private Integer turn;
     private String matchId;
     private String teamId;
+    private String position; // 选手位置：Top, Jungle, Mid, ADC, Support
 
     // 关联对象
     private Hero hero;
@@ -78,6 +79,14 @@ public class MatchPickBan {
         this.teamId = teamId;
     }
 
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     public Hero getHero() {
         return hero;
     }
@@ -139,6 +148,7 @@ public class MatchPickBan {
                 ", turn=" + turn +
                 ", matchId='" + matchId + '\'' +
                 ", teamId='" + teamId + '\'' +
+                ", position='" + position + '\'' +
                 ", roundNumber=" + roundNumber +
                 '}';
     }
