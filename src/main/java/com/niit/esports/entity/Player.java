@@ -1,15 +1,21 @@
 package com.niit.esports.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Player {
-    private String playerId;
+    private int playerId;
     private String gameName;
     private String position;
     private String nationality;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
-    private String teamId;
+    private Integer teamId;
 
     // 关联对象
     private Team team;
@@ -17,8 +23,8 @@ public class Player {
     // 构造函数
     public Player() {}
 
-    public Player(String playerId, String gameName, String position, String nationality,
-                  Date birthDate, Date createdAt, String teamId) {
+    public Player(int playerId, String gameName, String position, String nationality,
+                  Date birthDate, Date createdAt,Integer teamId) {
         this.playerId = playerId;
         this.gameName = gameName;
         this.position = position;
@@ -29,11 +35,11 @@ public class Player {
     }
 
     // Getter和Setter
-    public String getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
@@ -77,11 +83,11 @@ public class Player {
         this.createdAt = createdAt;
     }
 
-    public String getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(String teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
@@ -93,7 +99,7 @@ public class Player {
         this.team = team;
     }
 
-    // 工具方法：计算年龄
+    // 计算年龄
     public Integer getAge() {
         if (birthDate == null) {
             return null;

@@ -4,18 +4,16 @@ import com.niit.esports.entity.Player;
 import java.util.List;
 
 public interface PlayerService {
-    /**
-     * 获取所有选手
-     */
     List<Player> getAllPlayers();
-    
+    Player getPlayerById(int playerId);
+    void addPlayer(Player player);
+    void updatePlayer(Player player);
+    void deletePlayer(int playerId);
+    List<Player> getPlayersByTeamId(int teamId);
+    List<Player> getPlayersByGameName(String gameName);
+
     /**
      * 根据队伍ID获取选手列表
      */
     List<Player> getPlayersByTeamId(String teamId);
-    
-    /**
-     * 获取选手总数
-     */
-    int getPlayerCount();
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niit.esports.mapper.PlayerMapper">
+
+    <resultMap id="PlayerResultMap" type="com.niit.esports.entity.Player">
+        <id property="playerId" column="player_id"/>
+        <result property="gameName" column="game_name"/>
+        <result property="position" column="position"/>
+        <result property="nationality" column="nationality"/>
+        <result property="birthDate" column="birth_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="teamId" column="team_id"/>
+        <association property="team" javaType="com.niit.esports.entity.Team">
+            <id property="teamId" column="t_team_id"/>
+            <result property="teamName" column="team_name"/>
+            <result property="region" column="region"/>
+        </association>
+    </resultMap>
+
+    <select id="selectAllPlayers" resultType="com.niit.esports.entity.Player">
+        SELECT * FROM player ORDER BY player_id
+    </select>
+
+    <select id="selectPlayerCount" resultType="int">
+        SELECT COUNT(*) FROM player
+    </select>
+
+    <select id="findAllWithTeam" resultMap="PlayerResultMap">
+        SELECT
+            p.player_id,
+            p.game_name,
+            p.position,
+            p.nationality,
+            p.birth_date,
+            p.created_at,
+            p.team_id,
+            t.team_id as t_team_id,
+            t.team_name,
+            t.region
+        FROM player p
+                 LEFT JOIN team t ON p.team_id = t.team_id
+        ORDER BY p.player_id
+    </select>
+
+    <!-- 根据ID查询选手 -->
+    <select id="findById" parameterType="int" resultType="com.niit.esports.entity.Player">
+        SELECT * FROM player WHERE player_id = #{playerId}
+    </select>
+
+    <!-- 插入新选手 -->
+    <insert id="insert" parameterType="com.niit.esports.entity.Player">
+        INSERT INTO player (game_name, position, nationality, birth_date, created_at, team_id)
+        VALUES (#{gameName}, #{position}, #{nationality}, #{birthDate}, #{createdAt}, #{teamId})
+    </insert>
+
+    <!-- 删除选手 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM player WHERE player_id = #{playerId}
+    </delete>
+
+    <!-- 更新选手信息 -->
+    <update id="update" parameterType="com.niit.esports.entity.Player">
+        UPDATE player
+        SET game_name = #{gameName},
+            position = #{position},
+            nationality = #{nationality},
+            birth_date = #{birthDate},
+            team_id = #{teamId}
+        WHERE player_id = #{playerId}
+    </update>
+
+    <!-- 根据队伍ID查询选手 -->
+    <select id="findByTeamId" parameterType="int" resultType="com.niit.esports.entity.Player">
+        SELECT * FROM player WHERE team_id = #{teamId}
+    </select>
+
+    <select id="findByGameName" parameterType="string" resultMap="PlayerResultMap">
+        SELECT
+            p.player_id,
+            p.game_name,
+            p.position,
+            p.nationality,
+            p.birth_date,
+            p.created_at,
+            p.team_id,
+            t.team_id as t_team_id,
+            t.team_name,
+            t.region
+        FROM player p
+                 LEFT JOIN team t ON p.team_id = t.team_id
+        WHERE p.game_name LIKE CONCAT('%', #{gameName}, '%')
+        ORDER BY p.player_id
+    </select>
+</mapper>
