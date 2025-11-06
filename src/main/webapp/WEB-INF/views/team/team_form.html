@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title th:text="${pageTitle}">队伍表单</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${pageTitle}">队伍表单</h1>
+
+        <a th:href="@{/team}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回队伍列表
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/team/save}" method="post">
+                <input type="hidden" name="teamId" th:value="${team.teamId}" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="teamName" class="form-label">队伍名称 *</label>
+                            <input type="text" name="teamName" class="form-control" id="teamName"
+                                   th:value="${team.teamName}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="region" class="form-label">地区 *</label>
+                            <input type="text" name="region" class="form-control" id="region"
+                                   th:value="${team.region}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="logoUrl" class="form-label">Logo URL</label>
+                    <input type="text" name="logoUrl" class="form-control" id="logoUrl"
+                           th:value="${team.logoUrl}">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                    <a th:href="@{/team}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

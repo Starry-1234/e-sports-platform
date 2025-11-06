@@ -88,6 +88,7 @@
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
+                                            <th>战队</th>
                                             <th>玩家</th>
                                             <th>英雄</th>
                                             <th>K</th>
@@ -102,6 +103,9 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="stats : ${roundEntry.value}">
+                                            <td>
+                                                <span th:text="${stats.player?.team?.teamName ?: '未知队伍'}"></span>
+                                            </td>
                                             <td>
                                                 <span th:text="${stats.player?.gameName ?: stats.playerId}">玩家名称</span>
                                             </td>

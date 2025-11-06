@@ -2,8 +2,10 @@ package com.niit.esports.controller;
 
 import com.niit.esports.entity.Match;
 import com.niit.esports.entity.MatchPickBan;
+import com.niit.esports.entity.Player;
 import com.niit.esports.service.MatchPickBanService;
 import com.niit.esports.service.MatchService;
+import com.niit.esports.service.PlayerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class PickBanController {
     
     @Autowired
     private MatchService matchService;
+    
+    @Autowired
+    private PlayerService playerService;
     
     /**
      * BP分析根路径 - 显示比赛列表供选择
@@ -77,6 +82,35 @@ public class PickBanController {
                 }
             }
             
+            // 获取选手信息（如果需要的话）
+            List<Player> blueTeamPlayers = new ArrayList<>();
+            List<Player> redTeamPlayers = new ArrayList<>();
+            
+            // 如果有pick数据，尝试获取队伍ID来查询选手
+            if (!picks.isEmpty()) {
+                // 假设第一个pick是蓝队，第二个不同的队伍是红队
+                String blueTeamId = null;
+                String redTeamId = null;
+                
+                for (MatchPickBan pick : picks) {
+                    if (blueTeamId == null) {
+                        blueTeamId = pick.getTeamId();
+                    } else if (!blueTeamId.equals(pick.getTeamId()) && redTeamId == null) {
+                        redTeamId = pick.getTeamId();
+                        break;
+                    }
+                }
+                
+                // 根据队伍ID获取选手列表
+                if (blueTeamId != null) {
+                    blueTeamPlayers = playerService.getPlayersByTeamId(blueTeamId);
+                }
+                
+                if (redTeamId != null) {
+                    redTeamPlayers = playerService.getPlayersByTeamId(redTeamId);
+                }
+            }
+            
             Map<String, Object> stats = matchPickBanService.getPickBanStats(matchId);
             
             // 按对局分组数据（每20条为一个对局）
@@ -89,6 +123,8 @@ public class PickBanController {
             model.addAttribute("bansByRound", bansByRound);
             model.addAttribute("stats", stats);
             model.addAttribute("matchId", matchId);
+            model.addAttribute("blueTeamPlayers", blueTeamPlayers);
+            model.addAttribute("redTeamPlayers", redTeamPlayers);
             model.addAttribute("pageTitle", "BP分析");
         } catch (Exception e) {
             logger.error("获取BP分析数据时出错", e);
@@ -99,6 +135,8 @@ public class PickBanController {
             model.addAttribute("bansByRound", new HashMap<>());
             model.addAttribute("stats", new HashMap<>());
             model.addAttribute("matchId", matchId);
+            model.addAttribute("blueTeamPlayers", new ArrayList<>());
+            model.addAttribute("redTeamPlayers", new ArrayList<>());
         }
 
         return "pickban/match-pickban";

@@ -5,9 +5,50 @@
 
     <select id="selectAllTeams" resultType="com.niit.esports.entity.Team">
         SELECT * FROM team
+        ORDER BY team_id
     </select>
 
     <select id="selectTeamCount" resultType="int">
-        SELECT COUNT(*) FROM team
+        SELECT COUNT(*)
+        FROM team
     </select>
+
+    <!-- 查询所有队伍 -->
+    <select id="findAll" resultType="com.niit.esports.entity.Team">
+        SELECT * FROM team
+        ORDER BY team_id
+    </select>
+
+    <select id="findByName" parameterType="string" resultType="com.niit.esports.entity.Team">
+        SELECT * FROM team
+        WHERE team_name
+        LIKE CONCAT('%', #{teamName}, '%')
+    </select>
+
+    <!-- 根据ID查询队伍 -->
+    <select id="findById" parameterType="int" resultType="com.niit.esports.entity.Team">
+        SELECT * FROM team
+        WHERE team_id = #{teamId}
+    </select>
+
+    <!-- 插入新队伍 -->
+    <insert id="insert" parameterType="com.niit.esports.entity.Team" useGeneratedKeys="true" keyProperty="teamId">
+        INSERT INTO team (team_name, region, logo_url, created_at)
+        VALUES (#{teamName}, #{region}, #{logoUrl}, #{createdAt})
+    </insert>
+
+    <!-- 更新队伍信息 -->
+    <update id="update" parameterType="com.niit.esports.entity.Team">
+        UPDATE team
+        SET team_name = #{teamName},
+            region = #{region},
+            logo_url = #{logoUrl}
+        WHERE team_id = #{teamId}
+    </update>
+
+    <!-- 删除队伍 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM team
+        WHERE team_id = #{teamId}
+    </delete>
 </mapper>

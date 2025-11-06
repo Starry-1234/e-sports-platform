@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>选手列表</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>选手列表</h1>
+        <form th:action="@{/player/search}" method="get" class="d-flex">
+            <input type="text" name="keyword" class="form-control" placeholder="输入选手名称进行搜索..."
+                   th:value="${keyword}">
+            <button type="submit" class="btn btn-outline-primary ms-2" style="width: 120px">
+                <i class="fas fa-search"></i> 搜索
+            </button>
+        </form>
+        <a th:href="@{/player/add}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> 添加选手
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>选手</th>
+                        <th>年龄</th>
+                        <th>位置</th>
+                        <th>国籍</th>
+                        <th>所属队伍</th>
+                        <th>出道时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="player : ${player}">
+                        <td th:text="${player.playerId}">选手ID</td>
+                        <td th:text="${player.gameName}">选手</td>
+                        <td th:text="${player.age}">年龄</td>
+                        <td th:text="${player.position}">位置</td>
+                        <td th:text="${player.nationality}">国籍</td>
+                        <td th:text="${player.team?.teamName ?: '无'}">队伍</td>
+                        <td th:text="${#dates.format(player.createdAt, 'yyyy-MM-dd HH:mm')}">出道时间</td>
+                        <td>
+                            <a th:href="@{/player/edit/{playerId}(playerId=${player.playerId})}"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> 编辑
+                            </a>
+                            <a th:href="@{/player/delete/{playerId}(playerId=${player.playerId})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('确定删除这个选手吗？')">
+                                <i class="fas fa-trash"></i> 删除
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(player)}">
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                            暂无选手数据
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

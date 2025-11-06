@@ -21,6 +21,12 @@
         <association property="player" javaType="com.niit.esports.entity.Player">
             <id property="playerId" column="player_id"/>
             <result property="gameName" column="game_name"/>
+            <result property="teamId" column="team_id"/>
+            <!-- 关联查询队伍信息 -->
+            <association property="team" javaType="com.niit.esports.entity.Team">
+                <id property="teamId" column="team_id"/>
+                <result property="teamName" column="team_name"/>
+            </association>
         </association>
         
         <!-- 关联查询英雄信息 -->
@@ -44,9 +50,12 @@
             mps.player_id,
             mps.hero_id,
             p.game_name,
+            p.team_id,
+            t.team_name,
             h.hero_name
         FROM match_player_stats mps
         LEFT JOIN player p ON mps.player_id = p.player_id
+        LEFT JOIN team t ON p.team_id = t.team_id
         LEFT JOIN hero h ON mps.hero_id = h.hero_id
         WHERE mps.match_id = #{matchId}
         ORDER BY mps.player_id
@@ -54,19 +63,26 @@
     
     <select id="getStatsById" parameterType="string" resultMap="matchPlayerStatsResultMap">
         SELECT 
-            stats_id,
-            kills,
-            deaths,
-            assists,
-            gold_earned,
-            damage_dealt,
-            damage_taken,
-            vision_score,
-            match_id,
-            player_id,
-            hero_id
-        FROM match_player_stats
-        WHERE stats_id = #{statsId}
+            mps.stats_id,
+            mps.kills,
+            mps.deaths,
+            mps.assists,
+            mps.gold_earned,
+            mps.damage_dealt,
+            mps.damage_taken,
+            mps.vision_score,
+            mps.match_id,
+            mps.player_id,
+            mps.hero_id,
+            p.game_name,
+            p.team_id,
+            t.team_name,
+            h.hero_name
+        FROM match_player_stats mps
+        LEFT JOIN player p ON mps.player_id = p.player_id
+        LEFT JOIN team t ON p.team_id = t.team_id
+        LEFT JOIN hero h ON mps.hero_id = h.hero_id
+        WHERE mps.stats_id = #{statsId}
     </select>
     
     <insert id="addStats" parameterType="com.niit.esports.entity.MatchPlayerStats">

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title th:text="${pageTitle}">选手表单</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${pageTitle}">选手表单</h1>
+        <a th:href="@{/player}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回选手列表
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/player/save}" method="post">
+                <input type="hidden" name="playerId" th:value="${player.playerId}" />
+                <input type="hidden" name="createdAt" th:value="${#dates.format(player.createdAt, 'yyyy-MM-dd')}" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="gameName" class="form-label">游戏名 *</label>
+                            <input type="text" name="gameName" class="form-control" id="gameName"
+                                   th:value="${player.gameName}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="position" class="form-label">位置 *</label>
+                            <select name="position" class="form-select" id="position" required>
+                                <option value="">请选择位置</option>
+                                <option value="TOP" th:selected="${player.position == 'TOP'}">上单</option>
+                                <option value="JUNGLE" th:selected="${player.position == 'JUNGLE'}">打野</option>
+                                <option value="MID" th:selected="${player.position == 'MID'}">中单</option>
+                                <option value="ADC" th:selected="${player.position == 'ADC'}">ADC</option>
+                                <option value="SUPPORT" th:selected="${player.position == 'SUPPORT'}">辅助</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="nationality" class="form-label">国籍</label>
+                            <input type="text" name="nationality" class="form-control" id="nationality"
+                                   th:value="${player.nationality}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="teamId" class="form-label">所属队伍</label>
+                            <select name="teamId" class="form-select" id="teamId">
+                                <option value="">请选择队伍</option>
+                                <option th:each="team : ${teams}"
+                                        th:value="${team.teamId}"
+                                        th:text="${team.teamName}"
+                                        th:selected="${player.teamId == team.teamId}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="birthDate" class="form-label">出生日期</label>
+                    <input type="date" name="birthDate" class="form-control" id="birthDate"
+                           th:value="${player.birthDate != null ? #dates.format(player.birthDate, 'yyyy-MM-dd') : ''}">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                    <a th:href="@{/player}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
