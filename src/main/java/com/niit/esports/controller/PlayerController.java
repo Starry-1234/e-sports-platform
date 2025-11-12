@@ -23,9 +23,22 @@ public class PlayerController {
 
     // 显示所有选手
     @GetMapping
-    public String listPlayers(Model model) {
-        List<Player> players = playerService.getAllPlayers();
+    public String listPlayers( @RequestParam(value = "teamId", required = false) Integer teamId,
+                               Model model) {
+
+        List<Player> players;
+        // 按队伍分类
+        if (teamId != null) {
+            players = playerService.getPlayersByTeamId(teamId);
+        } else {
+            players = playerService.getAllPlayers();
+        }
+
+        List<Team> teams = teamService.getAllTeams();
+
         model.addAttribute("player", players);
+        model.addAttribute("teams", teams);
+        model.addAttribute("selectedTeamId", teamId);
         model.addAttribute("pageTitle", "选手列表");
         return "player/player_list";
     }

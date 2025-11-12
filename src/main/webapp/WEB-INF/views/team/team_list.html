@@ -29,6 +29,9 @@
                     <tr>
                         <th>ID</th>
                         <th>队伍名称</th>
+
+                        <th>Logo</th>
+
                         <th>地区</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -38,6 +41,14 @@
                     <tr th:each="team : ${team}">
                         <td th:text="${team.teamId}">队伍ID</td>
                         <td th:text="${team.teamName}">队伍名称</td>
+
+                        <td>
+                            <img th:if="${team.logoUrl}"
+                                 th:src="@{/static/images/team_logo/{filename}(filename=${team.logoUrl})}"
+                                 alt="Logo" width="50" height="50">
+                            <span th:unless="${team.logoUrl}">无Logo</span>
+
+                        </td>
                         <td th:text="${team.region}">地区</td>
                         <td th:text="${#dates.format(team.createdAt, 'yyyy-MM-dd HH:mm')}">创建时间</td>
                         <td>

@@ -17,7 +17,9 @@
 
     <div class="card">
         <div class="card-body">
-            <form th:action="@{/team/save}" method="post">
+<!--            <form th:action="@{/team/save}" method="post">-->
+            <form th:action="@{/team/save}" method="post" enctype="multipart/form-data">
+
                 <input type="hidden" name="teamId" th:value="${team.teamId}" />
 
                 <div class="row">
@@ -37,11 +39,105 @@
                     </div>
                 </div>
 
+
+
                 <div class="mb-3">
-                    <label for="logoUrl" class="form-label">Logo URL</label>
-                    <input type="text" name="logoUrl" class="form-control" id="logoUrl"
-                           th:value="${team.logoUrl}">
-                </div>
+                    <label class="form-label">选择预设Logo</label>
+                        <div class="row">
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_1.png}" alt="Logo 1" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_1.png" id="logo1">
+                                        <label class="form-check-label" for="logo1">Logo 1</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_2.png}" alt="Logo 2" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_2.png" id="logo2">
+                                        <label class="form-check-label" for="logo2">Logo 2</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_3.png}" alt="Logo 3" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_3.png" id="logo3">
+                                        <label class="form-check-label" for="logo3">Logo 3</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_4.png}" alt="Logo 4" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_4.png" id="logo4">
+                                        <label class="form-check-label" for="logo4">Logo 4</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_5.png}" alt="Logo 5" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_5.png" id="logo5">
+                                        <label class="form-check-label" for="logo5">Logo 5</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_6.png}" alt="Logo 6" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_6.png" id="logo6">
+                                        <label class="form-check-label" for="logo6">Logo 6</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_7.png}" alt="Logo 7" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_7.png" id="logo7">
+                                        <label class="form-check-label" for="logo7">Logo 7</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_8.png}" alt="Logo 8" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_8.png" id="logo8">
+                                        <label class="form-check-label" for="logo8">Logo 8</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-2">
+                                <div class="border rounded p-2 text-center">
+                                    <img th:src="@{/static/images/team_logo/logo_9.png}" alt="Logo 9" class="img-fluid mb-2" style="max-height: 80px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="selectedLogo" value="logo_9.png" id="logo9">
+                                        <label class="form-check-label" for="logo9">Logo 9</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="submit" class="btn btn-primary">

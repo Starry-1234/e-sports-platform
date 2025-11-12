@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/team")
 public class TeamController {
@@ -35,21 +42,50 @@ public class TeamController {
 
     // 保存队伍（新增或更新）
     @PostMapping("/save")
-    public String saveTeam(@ModelAttribute Team team) {
+    public String saveTeam(@ModelAttribute Team team,
+                           @RequestParam(value = "logoFile", required = false) MultipartFile logoFile,
+                           @RequestParam(value = "selectedLogo", required = false) String selectedLogo) {
+        // 处理文件上传
+        if (logoFile != null && !logoFile.isEmpty()) {
+            try {
+                // 原有的文件上传逻辑
+                String uploadDir = "src/main/webapp/static/images/team_logos/";
+                File dir = new File(uploadDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                String originalFilename = logoFile.getOriginalFilename();
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+
+                byte[] bytes = logoFile.getBytes();
+                Path path = Paths.get(uploadDir + uniqueFilename);
+                Files.write(path, bytes);
+
+                team.setLogoUrl(uniqueFilename);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 处理预设图片选择
+        else if (selectedLogo != null && !selectedLogo.isEmpty()) {
+            team.setLogoUrl(selectedLogo);
+        }
+
         if (team.getTeamId() == 0) {
-            // 新增队伍
             team.setCreatedAt(new Date());
-            team.setLogoUrl("default_logo.png");
-//            if (team.getTeamName() != null && !team.getTeamName().isEmpty()) {
-//                String logoUrl = team.getTeamName().toLowerCase().replaceAll("\\s+", "") + "_logo.png";
-//                team.setLogoUrl(logoUrl);
-//            }
+            if (team.getLogoUrl() == null || team.getLogoUrl().isEmpty()) {
+                team.setLogoUrl("default_logo.png");
+            }
             teamService.addTeam(team);
         } else {
-            // 更新队伍 - 需要保持原有的创建时间
             Team existingTeam = teamService.getTeamById(team.getTeamId());
             if (existingTeam != null) {
                 team.setCreatedAt(existingTeam.getCreatedAt());
+                if (team.getLogoUrl() == null || team.getLogoUrl().isEmpty()) {
+                    team.setLogoUrl(existingTeam.getLogoUrl());
+                }
             }
             teamService.updateTeam(team);
         }

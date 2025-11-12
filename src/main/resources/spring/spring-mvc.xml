@@ -14,7 +14,6 @@
     <context:component-scan base-package="com.niit.esports.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-
     <!-- 注解驱动 -->
     <mvc:annotation-driven>
         <mvc:message-converters>
@@ -33,10 +32,9 @@
 
     <!-- 静态资源处理 -->
     <mvc:resources mapping="/static/**" location="/static/"/>
-    <mvc:resources mapping="/resources/image/**" location="/resources/image/"/>
-    
+
     <!-- 默认servlet处理静态资源 -->
-    <mvc:default-servlet-handler/>
+<!--    <mvc:default-servlet-handler/>-->
 
     <!-- Thymeleaf配置 -->
     <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
@@ -61,5 +59,11 @@
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
         <property name="order" value="1"/>
+    </bean>
+
+    <!-- 文件上传解析器 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5242880"/> <!-- 5MB -->
+        <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 </beans>

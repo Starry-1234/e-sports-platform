@@ -21,7 +21,35 @@
         </a>
     </div>
 
-    <div class="card">
+    <div class="row">
+        <!-- 左侧队伍导航 -->
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">队伍筛选</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a th:href="@{/player}"
+                       class="list-group-item list-group-item-action"
+                       th:classappend="${selectedTeamId == null ? 'active' : ''}">
+                        <i class="fas fa-users"></i> 所有选手
+                    </a>
+                    <a th:each="team : ${teams}"
+                       th:href="@{/player(teamId=${team.teamId})}"
+                       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                       th:classappend="${selectedTeamId == team.teamId ? 'active' : ''}">
+                        <span>
+                            <i class="fas fa-user-friends"></i>
+                            <span th:text="${team.teamName}">队伍名称</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-10">
+        <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover table-striped mb-0">
@@ -69,6 +97,8 @@
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 </body>
 </html>
