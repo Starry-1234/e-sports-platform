@@ -33,8 +33,8 @@
     <!-- 静态资源处理 -->
     <mvc:resources mapping="/static/**" location="/static/"/>
 
-    <!-- 默认servlet处理静态资源 -->
-<!--    <mvc:default-servlet-handler/>-->
+<!--     默认servlet处理静态资源 -->
+    <mvc:default-servlet-handler/>
 
     <!-- Thymeleaf配置 -->
     <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
