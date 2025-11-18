@@ -198,17 +198,17 @@
                                         <div class="team-header d-flex align-items-center">
                                             <span th:if="${#lists.size(picks) > 0}">
                                                 <img th:if="${picks[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${picks[0].match.teamA.logoUrl})}"
-                                                     th:alt="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}"
+                                                     th:alt="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '1'}"
                                                      class="me-2 rounded" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
                                                 <span class="fs-5 text-primary fw-bold me-2"
-                                                      th:text="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '队伍A'}"></span>
+                                                      th:text="${picks[0].match.teamA?.teamName ?: picks[0].match.teamAId ?: '1'}"></span>
                                             </span>
                                             <span th:if="${#lists.size(picks) == 0 && #lists.size(bans) > 0}">
                                                 <img th:if="${bans[0].match.teamA?.logoUrl}" th:src="@{/resources/image/{logoName}(logoName=${bans[0].match.teamA.logoUrl})}"
-                                                     th:alt="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}"
+                                                     th:alt="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '1'}"
                                                      class="me-2 rounded" style="height: 30px; width: 30px; object-fit: contain;" onerror="this.style.display='none'">
                                                 <span class="fs-5 text-primary fw-bold me-2"
-                                                      th:text="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '队伍A'}"></span>
+                                                      th:text="${bans[0].match.teamA?.teamName ?: bans[0].match.teamAId ?: '1'}"></span>
                                             </span>
                                             <span class="badge bg-danger">BAN</span>
                                         </div>

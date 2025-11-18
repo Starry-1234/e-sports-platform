@@ -22,7 +22,7 @@
         
         <!-- 关联队伍信息 -->
         <association property="team" javaType="Team">
-            <id property="teamId" column="team_id"/>
+            <id property="teamId" column="t_team_id"/>
             <result property="teamName" column="team_name"/>
             <result property="region" column="region"/>
             <result property="logoUrl" column="logo_url"/>
@@ -47,16 +47,16 @@
             </association>
         </association>
     </resultMap>
-    
+
     <!-- 查询所有记录 -->
     <select id="findAll" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -65,16 +65,16 @@
                  LEFT JOIN team tb ON m.team_b_id = tb.team_id
         ORDER BY mpb.match_id, mpb.turn ASC
     </select>
-    
+
     <!-- 根据ID查询 -->
     <select id="findById" parameterType="String" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -88,11 +88,11 @@
     <select id="findByMatchId" parameterType="String" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -102,16 +102,16 @@
         WHERE mpb.match_id = #{matchId}
         ORDER BY mpb.turn ASC
     </select>
-    
+
     <!-- 根据队伍ID查询 -->
     <select id="findByTeamId" parameterType="String" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -121,16 +121,16 @@
         WHERE mpb.team_id = #{teamId}
         ORDER BY mpb.match_id, mpb.turn ASC
     </select>
-    
+
     <!-- 根据比赛ID和队伍ID查询 -->
     <select id="findByMatchIdAndTeamId" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -140,16 +140,16 @@
         WHERE mpb.match_id = #{matchId} AND mpb.team_id = #{teamId}
         ORDER BY mpb.turn ASC
     </select>
-    
+
     <!-- 根据比赛ID和操作类型查询 -->
     <select id="findByMatchIdAndAction" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -159,16 +159,16 @@
         WHERE mpb.match_id = #{matchId} AND mpb.action = #{action}
         ORDER BY mpb.turn ASC
     </select>
-    
+
     <!-- 根据比赛ID分页查询 -->
     <select id="findByMatchIdWithPage" resultMap="MatchPickBanMap">
         SELECT mpb.*,
                h.hero_name, h.role, h.avater_url,
-               t.team_name, t.region, t.logo_url,
+               t.team_id as t_team_id, t.team_name, t.region, t.logo_url,
                m.match_time, m.duration_seconds, m.score,
                m.team_a_id, m.team_b_id,
-               ta.team_name as team_a_name,
-               tb.team_name as team_b_name
+               ta.team_id as ta_team_id, ta.team_name as team_a_name,
+               tb.team_id as tb_team_id, tb.team_name as team_b_name
         FROM match_pick_ban mpb
                  LEFT JOIN hero h ON mpb.hero_id = h.hero_id
                  LEFT JOIN team t ON mpb.team_id = t.team_id
@@ -177,7 +177,7 @@
                  LEFT JOIN team tb ON m.team_b_id = tb.team_id
         WHERE mpb.match_id = #{matchId}
         ORDER BY mpb.turn ASC
-        LIMIT #{offset}, #{limit}
+            LIMIT #{offset}, #{limit}
     </select>
     
     <!-- 插入新记录 -->
